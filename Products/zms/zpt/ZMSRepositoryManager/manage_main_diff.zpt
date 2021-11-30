@@ -1,4 +1,5 @@
-<tal:block tal:define="
+<tal:block 
+	tal:define="
 	dummy0 python:request.set('ZMI_LIBS_JS',request.get('ZMI_LIBS_JS',[])+
 		['/++resource++zms_/jquery/diff/diff_match_patch.js'
 		,'/++resource++zms_/jquery/diff/jquery.pretty-text-diff.min.js'
@@ -87,7 +88,11 @@
 								tal:attributes="class python:'state alert-%s'%(filestate_css);
 									title python:'State: %s'%(filestate)">&nbsp;
 							</span>
-							<a href="#" tal:attributes="onclick python:'javascript:focus_anchorid(\'#%s\');;return false'%(here.id_quote(filename))" 
+							<a href="#" 
+								tal:define="attr_id python:[id,filename.replace(id+'/','').split('.')[0]][len(filename.split(id+'/'))>0]"
+								tal:attributes="
+									onclick python:'javascript:focus_anchorid(\'#%s\');;return false'%(here.id_quote(filename));
+									ondblclick python:'javascript:window.open(\'%s/manage_%s?lang=%s&id=%s&attr_id=%s\', target=\'_blank\')'%(provider.absolute_url(), id=='__metas__' and 'metas' or 'main',request['lang'],id, attr_id);" 
 								tal:content="python:filename">the filename
 							</a>
 						</tal:block>

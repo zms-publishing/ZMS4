@@ -935,6 +935,22 @@
     <Cell><Data ss:Type="String">עמודות</Data></Cell>
    </Row>
    <Row>
+    <Cell><Data ss:Type="String">ATTR_CONTENT</Data></Cell>
+    <Cell><Data ss:Type="String">Inhalt</Data></Cell>
+    <Cell><Data ss:Type="String">Content</Data></Cell>
+    <Cell><Data ss:Type="String">Inhoud</Data></Cell>
+    <Cell><Data ss:Type="String">Contenu</Data></Cell>
+    <Cell><Data ss:Type="String">Contenuto</Data></Cell>
+    <Cell><Data ss:Type="String">Contenido</Data></Cell>
+    <Cell><Data ss:Type="String">内容</Data></Cell>
+    <Cell><Data ss:Type="String">محتوی</Data></Cell>
+    <Cell><Data ss:Type="String">Содержание</Data></Cell>
+    <Cell><Data ss:Type="String">अंतर्वस्तु</Data></Cell>
+    <Cell><Data ss:Type="String">محتويات </Data></Cell>
+    <Cell><Data ss:Type="String">nội dung</Data></Cell>
+    <Cell><Data ss:Type="String">תוכן</Data></Cell>
+   </Row>
+   <Row>
     <Cell><Data ss:Type="String">ATTR_COMMANDLINE</Data></Cell>
     <Cell><Data ss:Type="String">Kommandozeile</Data></Cell>
     <Cell><Data ss:Type="String">Command-line</Data></Cell>
@@ -2949,8 +2965,11 @@
     <Cell><Data ss:Type="String">Aufklappen</Data></Cell>
     <Cell><Data ss:Type="String">Expand</Data></Cell>
     <Cell><Data ss:Type="String">Opklappen</Data></Cell>
-    <Cell ss:Index="6"><Data ss:Type="String">Aprire</Data></Cell>
-    <Cell ss:Index="9"/>
+    <Cell><Data ss:Type="String">Étendre</Data></Cell>
+    <Cell><Data ss:Type="String">Espandere</Data></Cell>
+    <Cell><Data ss:Type="String">Expandir</Data></Cell>
+    <Cell><Data ss:Type="String">拓展</Data></Cell>
+    <Cell><Data ss:Type="String">وسعت</Data></Cell>
     <Cell><Data ss:Type="String">открыть</Data></Cell>
     <Cell><Data ss:Type="String">फैलाना</Data></Cell>
     <Cell><Data ss:Type="String">تمديد</Data></Cell>
@@ -2964,14 +2983,46 @@
     <Cell><Data ss:Type="String">Exporteren</Data></Cell>
     <Cell><Data ss:Type="String">Exporter</Data></Cell>
     <Cell><Data ss:Type="String">Esportare</Data></Cell>
-    <Cell ss:Index="8"><Data ss:Type="String">导出</Data></Cell>
-
+    <Cell><Data ss:Type="String">Export</Data></Cell>
+    <Cell><Data ss:Type="String">导出</Data></Cell>
     <Cell><Data ss:Type="String">صادرات</Data></Cell>
     <Cell><Data ss:Type="String">экспортировать</Data></Cell>
     <Cell><Data ss:Type="String">निर्यात</Data></Cell>
     <Cell><Data ss:Type="String">تصدير</Data></Cell>
     <Cell><Data ss:Type="String">Xuất ra</Data></Cell>
     <Cell><Data ss:Type="String">מייצא</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">BTN_GITPULL</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+    <Cell><Data ss:Type="String">Git Pull</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">BTN_GITPUSH</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
+    <Cell><Data ss:Type="String">Git Push</Data></Cell>
    </Row>
    <Row>
     <Cell><Data ss:Type="String">BTN_IMPORT</Data></Cell>
@@ -3998,7 +4049,7 @@
     <Cell><Data ss:Type="String">Soll Objekt wirklich gelöscht werden?</Data></Cell>
     <Cell><Data ss:Type="String">Do you really want to delete this object?</Data></Cell>
     <Cell ss:Index="5"><Data ss:Type="String">Voulez-vous vraiment supprimer le objet?</Data></Cell>
-    <Cell><Data ss:Type="String">Volete cancellare veramente l\'oggetto selezionato?</Data></Cell>
+    <Cell><Data ss:Type="String">Volete cancellare veramente l`oggetto selezionato?</Data></Cell>
     <Cell><Data ss:Type="String">¿Usted realmente desea suprimir el objeto?</Data></Cell>
     <Cell><Data ss:Type="String">确实覿删除对象志?</Data></Cell>
     <Cell><Data ss:Type="String">آيا مي خواهيد شي مورد نظر را حذٿ کنيد ؟</Data></Cell>
@@ -4031,7 +4082,7 @@
     <Cell><Data ss:Type="String">MSG_CONFIRM_DESCENDANT_LANGS</Data></Cell>
     <Cell><Data ss:Type="String">Diese Aktion kann sich auf abhängige Sprachen (%s) auswirken. Wollen Sie trotzdem fortfahren?</Data></Cell>
     <Cell><Data ss:Type="String">This action may affect descendant languages (%s). Do you want to proceed anyway?</Data></Cell>
-    <Cell ss:Index="6"><Data ss:Type="String">Questa azione puo\' avere consequenze su altre lingue correlate (%s). Volete comunque andare avanti?</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">Questa azione puo` avere consequenze su altre lingue correlate (%s). Volete comunque andare avanti?</Data></Cell>
     <Cell ss:Index="8"><Data ss:Type="String">这擿作会影哿相关语言 (%s) 您是忦覿继续?</Data></Cell>
     <Cell><Data ss:Type="String">اين عمل ممکن است روي زبانهاي موجود اثر ب?ذارد. آيا مايليد ادامه دهيد ؟</Data></Cell>
     <Cell><Data ss:Type="String">Эта акция может отразиться на зависимые языки  (%s). Хотите продолжать?</Data></Cell>
@@ -4473,7 +4524,7 @@
     <Cell><Data ss:Type="String">MSG_UNDOVERSION</Data></Cell>
     <Cell><Data ss:Type="String">Unten sehen Sie die Historie aller Versionen dieses Objekts. Sie können Versionen miteinander vergleichen oder das Objekt auf eine frühere Version zurücksetzen.</Data></Cell>
     <Cell><Data ss:Type="String">Below you see the history of all versions of this object. You can compare two versions or reset this object to an earlier version.</Data></Cell>
-    <Cell ss:Index="6"><Data ss:Type="String">Sotto vedete la storia di tutte le versioni riguardanti questo oggetto. Potete riportare l\'oggetto a una versione precedente.</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">Sotto vedete la storia di tutte le versioni riguardanti questo oggetto. Potete riportare l`oggetto a una versione precedente.</Data></Cell>
     <Cell ss:Index="8"><Data ss:Type="String">在下鿢显示该对象的版本历忲。 您忯以濢夿早期的版本。</Data></Cell>
     <Cell><Data ss:Type="String">از</Data></Cell>
     <Cell/>
@@ -6504,8 +6555,8 @@
    </Row>
    <Row>
     <Cell><Data ss:Type="String">TYPE_ZMSGRAPHIC</Data></Cell>
-    <Cell><Data ss:Type="String">Grafik</Data></Cell>
-    <Cell><Data ss:Type="String">Graphic</Data></Cell>
+    <Cell><Data ss:Type="String">Abbildung</Data></Cell>
+    <Cell><Data ss:Type="String">Image</Data></Cell>
     <Cell><Data ss:Type="String">Afbeelding</Data></Cell>
     <Cell><Data ss:Type="String">Image</Data></Cell>
     <Cell><Data ss:Type="String">Grafico</Data></Cell>

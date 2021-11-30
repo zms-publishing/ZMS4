@@ -2,33 +2,24 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python3: Zope-ZMS4",
+            "name": "Python: ZMS4-Py2-Dev",
             "type": "python",
             "request": "launch",
-            "program": "/home/dev/workspace/zopefoundation/Zope/src/Zope2/Startup/serve.py",
-            // "module": "Zope2.Startup.serve",
-            "justMyCode": false,
+            "program": "/home/zope/vpy27/lib/python2.7/site-packages/Zope2/Startup/run.py",
+            // "module": "Zope2.Startup.run",
             "console": "integratedTerminal",
             "args": [
-                "-d",
-                "-v",
-                "/home/zope/instance/zms4_dev/etc/zope.ini"
+                "-C ../../etc/zope.conf",
+                // "-X 'debug-mode=on'",
             ],
             "env": {
-                "PYTHONUNBUFFERED":"1",
-                "CONFIG_FILE": "/home/zope/instance/zms4_dev/etc/zope.ini",
+                "CONFIG_FILE": "/home/zope/instance/zms4_dev/etc/zope.conf",
                 "INSTANCE_HOME": "/home/zope/instance/zms4_dev",
-                "CLIENT_HOME": "/home/zope/instance/zms4_dev",
-                "PYTHON": "/home/zope/vpy37/bin/python",
-                "SOFTWARE_HOME": "/home/zope/vpy37/bin/"
+                "PYTHON": "/home/zope/vpy27/bin/python",
+                "SOFTWARE_HOME": "/home/zope/vpy27/bin/",
+                "ZDCTL": "/home/zope/vpy27/bin/zopectl",
+                "ZOPE_RUN": "/home/zope/vpy27/bin/runzope",
             },
-        },
-        {
-            "name":"Python3: Current File",
-            "type":"python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
         }
     ]
 }

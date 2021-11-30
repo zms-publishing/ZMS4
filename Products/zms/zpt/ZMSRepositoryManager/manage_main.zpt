@@ -3,9 +3,9 @@
 	dummy0 python:here.zmi_page_request(here,request);
 	zmscontext python:here.getSelf();
 	standard modules/Products.zms/standard">
-<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<head tal:replace="structure python:here.zmi_html_head(here,request)">zmi_html_head</head>
 <body tal:attributes="class python:here.zmi_body_class(id='repository_manager_main config')">
-<tal:block tal:content="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</tal:block>
+<header tal:replace="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</header>
 <div id="zmi-tab">
 <tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request,extra=[here.manage_sub_options()[0]])">zmi_breadcrumbs</tal:block>
 
@@ -26,40 +26,39 @@
 
 <div class="tab-content" 
 	tal:attributes="class python:'tab-content update_direction-%s auto_update-%s debug-%s'%(here.get_update_direction(),here.get_auto_update(),here.getConfProperty('ZMS.debug',0))"> 
-	<div class="tab-pane fade active show" id="diff">
-		<form class="form-horizontal card" action="manage_change" method="post">
+	<div class="tab-pane fade active show card" id="diff">
+		<form class="form-horizontal" action="manage_change" method="post">
 		<input type="hidden" name="lang" tal:attributes="value request/lang" />
 		<div class="form-group row">
 			<label class="col-sm-2"></label>
-			<div class="col-sm-10">
+			<div class="col-sm-10 text-nowrap form-group">
 				<span class="btn btn-secondary" tal:attributes="title python:'%s/%s'%(here.getZMILangStr('BTN_SLCTALL'),here.getZMILangStr('BTN_SLCTNONE'))" onclick="zmiToggleSelectionButtonClick(this)"><i class="fas fa-check-square"></i></span>
 				<button type="submit" class="btn btn-secondary" name="btn" value="refresh"><i class="icon-repeat fas fa-redo-alt"></i> Refresh</button>
 				<tal:block tal:define="meta_cmds python:here.getMetaCmds(here,'repository')">
-					<div class="btn-group" tal:condition="not:meta_cmds">
+					<div class="btn-group">
 						<button id="btn_save_to_repo" 
-							type="submit" class="btn btn-secondary" name="btn" value="commit" title="Save Sources to Filesystem"
+							type="submit" class="btn btn-secondary" name="btn" value="commit" title="Export to Filesystem"
 							tal:attributes="class python:here.get_update_direction()=='Saving' and 'btn btn-primary' or default">
 							<i class="fas fa-download"></i>
-							<span>Save</span>
+							<span>Export</span>
 						</button>
 						<button id="btn_load_from_repo" 
-							type="submit" class="btn btn-secondary" name="btn" value="update" title="Load Sources from Filesystem"
+							type="submit" class="btn btn-secondary" name="btn" value="update" title="Import from Filesystem"
 							tal:attributes="class python:here.get_update_direction()=='Loading' and 'btn btn-primary' or default">
 							<i class="fas fa-upload"></i>
-							<span>Load</span>
+							<span>Import</span>
 						</button>
 					</div>
-					<div class="dropdown" tal:condition="meta_cmds">
-						<button class="btn btn-secondary dropdown-toggle" type="button" id="teamDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Team
+					<div class="btn-group dropdown" tal:condition="meta_cmds">
+						<button class="btn btn-danger dropdown-toggle" type="button" id="teamDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Repository-Interaction
 						</button>
 						<div class="dropdown-menu" aria-labelledby="teamDropdownMenuButton">
-								<li tal:repeat="meta_cmd meta_cmds">
-									<a tal:attributes="href python:meta_cmd['id'];title python:meta_cmd.get('title','id')">
-										<i tal:condition="python:meta_cmd.get('icon_clazz')" tal:attributes="class python:meta_cmd.get('icon_clazz','fas fa-square')"></i>
-										<tal:block tal:content="python:here.getZMILangStr(meta_cmd['name'])">the action-name</tal:block>
-									</a>
-								</li>
+							<a tal:repeat="meta_cmd meta_cmds" class="dropdown-item"
+								tal:attributes="href python:meta_cmd['id'];title python:meta_cmd.get('title','id')">
+								<i tal:condition="python:meta_cmd.get('icon_clazz')" tal:attributes="class python:meta_cmd.get('icon_clazz','fas fa-square')"></i>
+								<span tal:replace="python:here.getZMILangStr(meta_cmd['name'])">the action-name</span>
+							</a>
 						</div>
 					</div>
 				</tal:block>
@@ -69,19 +68,20 @@
 			title="File System Path connected to a Versioning Repository. Please, Double-Click for Editing.">
 			<label class="col-sm-2 control-label">System-Path</label>
 			<div class="col-sm-10">
-				<div class="form-control" readonly="readonly" style="user-select:none;background:#f5f5f5"
+				<div class="form-control" readonly="readonly" 
+					style="user-select:none;background:#f5f5f5;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;"
 					ondblclick="javascript:$('a#nav-link-properties').click();$('#basepath').focus()"
 					tal:content="python:here.get_conf_basepath('')">
 				</div>
 			</div>
 		</div>
 		<div class="form-group row mb-5 diffcoloring"
-			title="Coloring the latest Code Differences in ZMS on Loading or in Filesystem on Saving. Please, Double-Click for Selecting the Coloring Mode.">
+			title="Double-Click to change the coloring">
 			<label class="col-sm-2 control-label">Working Mode</label>
 			<div class="col-sm-10">
 				<div class="form-control" readonly="readonly" style="user-select:none;background:#f5f5f5"
 					ondblclick="javascript:$('a#nav-link-properties').click();$('#update_direction').focus()">
-					<span class="selected" tal:content="python:here.get_update_direction()=='Loading' and 'Loading Mode: Showing ZMS Code Changes (Default)' or 'Saving Mode: Showing Filesystem Changes'">Loading Mode</span>
+					<span class="selected" tal:content="python:here.get_update_direction()=='Loading' and 'Import Mode: Show changes in Filesystem compared to ZMS (Default)' or 'Export Mode: Show changes in ZMS compared to Filesystem'">Loading Mode</span>
 					<small style="float:right;padding-top:0.2em">
 						<span class="state alert-success">&nbsp;</span> <tal:block tal:content="python:here.getZMILangStr('STATE_NEW')"></tal:block>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<span class="state alert-warning">&nbsp;</span> <tal:block tal:content="python:here.getZMILangStr('STATE_MODIFIED')"></tal:block>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -95,8 +95,8 @@
 		</tal:block>
 		</form>
 	</div><!-- .tab-pane -->
-	<div id="properties" class="tab-pane">
-		<form class="form-horizontal card" action="manage_change" method="post">
+	<div id="properties" class="tab-pane card">
+		<form class="form-horizontal" action="manage_change" method="post">
 			<input type="hidden" name="lang" tal:attributes="value request/lang" />
 			<div class="form-group row">
 				<label class="col-sm-2 control-label mandatory">
@@ -112,8 +112,8 @@
 				</label>
 				<div class="col-sm-10">
 					 <select id="update_direction" name="update_direction" class="form-control" title="Please select how to color the code differences...">
-						<option value="Loading" tal:attributes="selected python:here.get_update_direction()=='Loading' and 'selected' or None">Loading Mode: Showing ZMS Code Changes on Loading from File System (Default)</option>
-						<option value="Saving" tal:attributes="selected python:here.get_update_direction()=='Saving' and 'selected' or None">Saving Mode: Showing File System Code Changes on Saving from ZMS</option>
+						<option value="Loading" tal:attributes="selected python:here.get_update_direction()=='Loading' and 'selected' or None">Import Mode: Show changes in Filesystem compared to ZMS (Default)</option>
+						<option value="Saving" tal:attributes="selected python:here.get_update_direction()=='Saving' and 'selected' or None">Export Mode: Show changes in ZMS compared to Filesystem</option>
 					</select>
 				</div><!-- .col-sm-10 -->
 			</div><!-- .form-group -->
