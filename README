@@ -10,9 +10,9 @@ http://www.zms-publishing.com
 Changelog
 ---------
 
-    * Changes: https://github.com/zms-publishing/ZMS4/blob/master/CHANGES
+    * Source: https://github.com/zms-publishing/ZMS4/
     * Revisions: https://github.com/zms-publishing/ZMS4/commits/master
-    * Source: https://github.com/zms-publishing/ZMS4/archive/master.zip
+    * Zip-Archive: https://github.com/zms-publishing/ZMS4/archive/master.zip
 
 Installation (GNU/Linux, OSX/Darwin and Windows/WSL)
 ----------------------------------------------------
@@ -31,6 +31,12 @@ $ virtualenv ZMS4
 ::
 
 $ ./ZMS4/bin/pip install https://github.com/zms-publishing/ZMS4/archive/master.zip [--upgrade]
+
+or from pypi
+
+::
+
+$ ./ZMS4/bin/pip install 'ZMS<=5' [--upgrade]
 
 **(3) Create an Instance [or restart on Upgrade]**
 
