@@ -36,7 +36,7 @@ or from pypi
 
 ::
 
-$ ./ZMS4/bin/pip install 'ZMS<=5' [--upgrade]
+$ ./ZMS4/bin/pip install 'ZMS<5' [--upgrade]
 
 **(3) Create an Instance [or restart on Upgrade]**
 
