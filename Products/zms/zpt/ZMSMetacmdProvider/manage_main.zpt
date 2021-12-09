@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" tal:define="zmscontext python:here.getSelf(); standard modules/Products.zms/standard">
-<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<head tal:replace="structure python:here.zmi_html_head(here,request)">zmi_html_head</head>
 <body tal:attributes="class python:here.zmi_body_class(id='metas config')">
-<tal:block tal:content="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</tal:block>
+<header tal:replace="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</header>
 <div id="zmi-tab">
 <tal:block tal:define="
 		execution_options python:[(0,'None'),(1,'Omit UI'),(2,'Script')];
@@ -82,14 +82,14 @@
 						<textarea class="form-control url-input" name="el_nodes" tal:content="python:metaCmd.get('nodes','{$}')"></textarea>
 					</td>
 					<td tal:define="roles python:['*']+here.getUserDefinedRoles()">
-						<select name="el_roles:list" size="10" multiple="multiple" class="form-control-sm container">
+						<select name="el_roles:list" size="10" multiple="multiple" class="form-control form-control-sm">
 							<tal:block tal:repeat="role roles"
 								><option tal:attributes="value role; selected python:['','selected'][int(role in metaCmd.get('roles',[]))]" tal:content="python:here.getRoleName(role)">role</option>
 							</tal:block>
 						</select>
 					</td>
 					<td>
-						<select name="el_meta_types:list" size="10" multiple="multiple" class="form-control-sm container">
+						<select name="el_meta_types:list" size="10" multiple="multiple" class="form-control form-control-sm">
 							<tal:block tal:repeat="meta_type python:['*']"
 								><option tal:attributes="value meta_type; selected python:['','selected'][int(meta_type in metaCmd.get('meta_types',[]))]" tal:content="meta_type">meta_type</option>
 							</tal:block
@@ -197,7 +197,7 @@
 	<input type="hidden" name="lang" tal:attributes="value request/lang">
 	<legend tal:content="python:here.getZMILangStr('TAB_METACMD')">Metacmd</legend>
 	<p class="well well-small d-none" tal:content="structure python:here.getZMILangStr('MSG_METACMD')">well</p>
-	<table class="table table-striped table-bordered table-hover mb-0">
+	<table class="table table-sm table-striped table-bordered table-hover mb-0">
 	<thead>
 		<tr tal:condition="python:here.meta_type=='ZMSMetacmdProvider'">
 			<th class="meta-ids">
@@ -238,10 +238,12 @@
 			<td>
 				<tal:block tal:condition="python:ob is not None">
 					<tal:block tal:condition="python:metaCmd.get('acquired',False)">
-						<a tal:attributes="href python:'/'.join([here.getPortalMaster().absolute_url()]+request['URL'].split('/')[-2:]); title python:'%s (%s)'%(ob.id,ob.meta_type)" target="_blank">
-							<tal:block tal:condition="python:metaCmd.get('acquired',False)"><i class="fas fa-share',extra='title=\042acquired\042"></i>acquired</tal:block>
-						</a>
-						<i tal:condition="python:metaCmd.get('icon_clazz',False)" tal:attributes="class python:metaCmd.get('icon_clazz')"></i>
+						<a target="_blank"
+							tal:attributes="
+								href python:'%s/metacmd_manager/manage_main?lang=%s&id=%s'%(context.getRootElement().absolute_url(),request['lang'],metaCmd['id']);
+								title python:'acquired from: %s (%s)'%(context.getRootElement().getHome().id, context.getRootElement().attr('titlealt'))"
+							><i class="fas fa-share"></i></a>
+						<i tal:condition="python:metaCmd.get('icon_clazz',False)" tal:attributes="class python:metaCmd.get('icon_clazz')"></i>&nbsp;&nbsp;
 						<strong tal:content="python:metaCmd['id']">the id</strong> ( <tal:block tal:content="python:here.getZMILangStr(metaCmd['name'])">Name</tal:block> )
 					</tal:block>
 					<tal:block tal:condition="not:python:metaCmd.get('acquired',False)">
@@ -255,7 +257,7 @@
 					(<tal:block tal:content="python:metaCmd['meta_type']">the type</tal:block>)
 				</tal:block>
 				<div class="text-danger alert-danger" tal:condition="python:ob is None">
-					<i class="fas fa-warning-sign" tal:attributes="title python:'%s not found'%metaCmd['id']"></i>
+					<i class="fas fa-exclamation-triangle" tal:attributes="title python:'%s not found'%metaCmd['id']"></i>
 					<tal:block tal:condition="python:metaCmd.get('acquired',False)"
 						><a tal:attributes="href python:'/'.join([here.getPortalMaster().absolute_url()]+request['URL'].split('/')[-2:])" target="_blank"
 							><i class="fas fa-share" title="acquired"></i></a>
