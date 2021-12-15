@@ -548,8 +548,11 @@ def toXml(self, value, indentlevel=0, xhtml=False, encoding='utf-8'):
       xml.append(' type="file"')
       xml.append('>')
       data = zopeutil.readData(value)
-      if content_type.startswith('text/') or content_type in ['application/css','application/javascript','image/svg']:
-        data = standard.pystr(data,'utf-8')
+      if content_type.startswith('text/') or content_type in ['application/css','application/javascript','image/svg']
+        try:
+          data = standard.pystr(data,'utf-8')
+        except:
+          pass
       cdata = None
       # Ensure CDATA is valid.
       try:
