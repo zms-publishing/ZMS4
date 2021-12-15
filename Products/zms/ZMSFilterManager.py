@@ -286,7 +286,10 @@ class ZMSFilterManager(
       ids = list(obs)
       portalMaster = self.getPortalMaster()
       if portalMaster is not None:
-        ids = list(set(ids+portalMaster.getProcessIds()))
+        try:
+          ids = list(set(ids+portalMaster.getProcessIds()))
+        except:
+          standard.writeError(self, "[portalMaster]: AttributeError: getProcessIds")
       if sort:
         ids = sorted(ids,key=lambda x:self.getProcess(x)['name'])
       return ids
