@@ -229,8 +229,10 @@ class ZMSRepositoryManager(
           except:
             pass
         # Normalize Windows CR+LF line break to Unix LF
-        l['data'] = l['data'].replace('\r\n','\n')
-        r['data'] = r['data'].replace('\r\n','\n')
+        if l.get('data', None):
+          l['data'] = l['data'].replace('\r\n','\n')
+        if r.get('data', None):
+          r['data'] = r['data'].replace('\r\n','\n')
         if l.get('data', '') != r.get('data', ''):
           data = l.get('data', r.get('data', ''))
           try:
@@ -364,15 +366,15 @@ class ZMSRepositoryManager(
                 _fileutil.mkDir(folder)
               standard.writeLog(self,"[commitChanges]: write %s"%filepath)
               data = files[file]['data']
+              data = files[file]['data']
               if data is not None:
                 f = open(filepath,"wb")
                 if isinstance(data,str):
-                  data = data.encode("utf-8")
-                try:
-                  f.write(data)
-                except:
-                  # f.write('## ERROR ON FILE WRITE')
-                  f.write(data.encode("utf-8"))
+                  try:
+                    data = data.encode("utf-8")
+                  except:
+                    pass
+                f.write(data)
                 f.close()
               else:
                 failure.append('%s is None'%file)
