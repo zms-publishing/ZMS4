@@ -146,6 +146,18 @@ def six_ensure_str(s, encoding='utf-8', errors='strict'):
     return s
 
 
+security.declarePublic('addZMSCustom')
+def addZMSCustom(self, meta_id=None, values={}, REQUEST=None):
+  """
+  Public alias for manage_addZMSCustom
+  @param meta_id
+  @param values
+  @param REQUEST
+  @rtype: C{ZMSCustom}
+  """
+  return self.manage_addZMSCustom(meta_id, values, REQUEST)
+
+
 def url_quote(s):
   return urllib_quote(s)
 
