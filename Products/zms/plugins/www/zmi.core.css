@@ -659,6 +659,9 @@ body.zmi ul.zmi-container .zmi-item.pageelement .center .contentEditable {
 	padding:3px 6px 3px 1.5em;
 	overflow:hidden;
 }
+body.zmi ul.zmi-container .zmi-item.pageelement .center .contentEditable .contentEditable {
+	padding:unset;
+}
 body.zmi ul.zmi-container .zmi-item.page .center .contentEditable {
 	padding-top: .4rem;
 	padding-left: 1rem;
