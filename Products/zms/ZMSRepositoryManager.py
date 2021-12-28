@@ -229,9 +229,9 @@ class ZMSRepositoryManager(
           except:
             pass
         # Normalize Windows CR+LF line break to Unix LF in string objects
-        if l.get('data', None) and isinstance(l.get('data', ''),str):
+        if l.get('data', None) and isinstance(l.get('data', ''),(str,unicode)):
           l['data'] = l['data'].replace('\r\n','\n')
-        if r.get('data', None) and isinstance(r.get('data', ''),str):
+        if r.get('data', None) and isinstance(r.get('data', ''),(str,unicode)):
           r['data'] = r['data'].replace('\r\n','\n')
         if l.get('data', '') != r.get('data', ''):
           data = l.get('data', r.get('data', ''))
