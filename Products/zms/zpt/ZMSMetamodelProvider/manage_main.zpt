@@ -350,7 +350,7 @@
 			><tal:block tal:repeat="role python:here.getUserDefinedRoles()"
 				><tal:block
 					tal:define="role_str python:'ROLE_%s'%role.upper(); role_lang_str python:here.getZMILangStr(role_str)"
-					tal:condition="python: role not in ['ZMSSubscriber','ZMSUserAdministrator']"
+					tal:condition="python: role not in ['ZMSSubscriber','ZMSUserAdministrator'] and role not in list([x[0] for x in roleOptpl])"
 					><tal:block tal:condition="python:role_str==role_lang_str"
 						><tal:block tal:define="roleappend0 python:roleOptpl.append([role,role])"
 						></tal:block
