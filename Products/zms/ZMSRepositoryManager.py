@@ -366,7 +366,6 @@ class ZMSRepositoryManager(
                 _fileutil.mkDir(folder)
               standard.writeLog(self,"[commitChanges]: write %s"%filepath)
               data = files[file]['data']
-              data = files[file]['data']
               if data is not None:
                 f = open(filepath,"wb")
                 if isinstance(data,str):
