@@ -295,18 +295,20 @@ def translate_path(s):
 ################################################################################
 # Dynamic Modification of the Zope Skin
 ################################################################################
-confdict = _confmanager.ConfDict.get()
-if six.PY2 and confdict.get('zmi.console') in ['light','dark']:
-  from App.special_dtml import DTMLFile
-  from App.Management import Navigation
-  from App.Management import Tabs
-  from App.ApplicationManager import DebugManager
-  from OFS.ObjectManager import ObjectManager
-  Navigation.manage = DTMLFile('skins/zope2/manage', globals())
-  setattr(Navigation, 'manage_page_style.css', DTMLFile('skins/zope2/manage_page_style_%s.css'%(confdict['zmi.console']), globals()))
-  Navigation.manage_page_header = DTMLFile('skins/zope2/manage_page_header', globals())
-  Navigation.manage_page_footer = DTMLFile('skins/zope2/manage_page_footer', globals())
-  Navigation.manage_menu = DTMLFile('skins/zope2/menu', globals())
-  Tabs.manage_tabs = DTMLFile('skins/zope2/manage_tabs', globals())
-  ObjectManager.manage_main = DTMLFile('skins/zope2/main', globals())
-  DebugManager.manage_main = DTMLFile('skins/zope2/debug', globals())
+installed_packages = standard.get_installed_packages()
+if not 'Zope2==4' in installed_packages and not 'Zope-4' in installed_packages:
+  confdict = _confmanager.ConfDict.get()
+  if six.PY2 and confdict.get('zmi.console') in ['light','dark']:
+    from App.special_dtml import DTMLFile
+    from App.Management import Navigation
+    from App.Management import Tabs
+    from App.ApplicationManager import DebugManager
+    from OFS.ObjectManager import ObjectManager
+    Navigation.manage = DTMLFile('skins/zope2/manage', globals())
+    setattr(Navigation, 'manage_page_style.css', DTMLFile('skins/zope2/manage_page_style_%s.css'%(confdict['zmi.console']), globals()))
+    Navigation.manage_page_header = DTMLFile('skins/zope2/manage_page_header', globals())
+    Navigation.manage_page_footer = DTMLFile('skins/zope2/manage_page_footer', globals())
+    Navigation.manage_menu = DTMLFile('skins/zope2/menu', globals())
+    Tabs.manage_tabs = DTMLFile('skins/zope2/manage_tabs', globals())
+    ObjectManager.manage_main = DTMLFile('skins/zope2/main', globals())
+    DebugManager.manage_main = DTMLFile('skins/zope2/debug', globals())
