@@ -800,18 +800,61 @@ li.zmi-item span.zmi-ids {
 	cursor:pointer;
 }
 .zmi-manage-main-change {
-	color:#888;
+	color:#999;
 	font-size:11px;
-	margin:4px 0 0 11px;
+	margin:.7rem 0 0 0;
 	overflow: hidden;
 	text-overflow:ellipsis;
+	display:block;
+	padding-left: 1rem;
+	white-space: nowrap;
+	max-width: 20vw;
+	line-height:1;
 }
-/* Contraints */
+.zmi-manage-main-change .zmi-state {
+	font-family: inherit;
+	font-weight: normal;
+	display:inline-block;
+	max-width:6vw;
+	overflow:hidden;
+	text-overflow:ellipsis
+}
+.zmi-manage-main-change span.zmi-state:after {
+	content:attr(title);
+}
+.zmi-manage-main-change span.zmi-state.zmi-change-dt:after {
+	content:attr(data-mydate);
+	max-width: 6em;
+}
+.zmi-manage-main-change .zmi-state.fas:before,
+.zmi-manage-main-change .zmi-state.far:before {
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+	font-size: 12px !important;
+	margin: 0 0.25rem;
+	display:inline-block;
+}
+.zmi-manage-main-change .zmi-state.far:before {
+	font-weight: 400;
+	display:inline-block;
+}
+.zmi-manage-main-change .zmi-state i:before {
+	font-size: 12px !important;
+}
+.zmi-manage-main-change .zmi-state:not(:first-child) i:before  {
+    margin-left:0.25rem;
+}
+
+/* Constraints */
 .zmi-manage-main-change .constraint {
 	display: inline;
+	vertical-align: top;
+	padding-left: .35rem;
+	white-space: nowrap;
 }
 .zmi-manage-main-change .constraint span {
 	display:none;
+	padding-left: .25rem;
 }
 .zmi.properties .card .constraint-error {
 	color:#721c24;
