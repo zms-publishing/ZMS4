@@ -73,8 +73,12 @@ def addObject(container, meta_type, id, title, data, permissions={}):
   Add Zope-object to container.
   """
   if meta_type == 'DTML Document':
+    # Enforce to utf-8 unicode type
+    data = unicode(standard.pystr2(data),'utf-8','replace')
     addDTMLDocument( container, id, title, data)
   elif meta_type == 'DTML Method':
+    # Enforce to utf-8 unicode type
+    data = unicode(standard.pystr2(data),'utf-8','replace')
     addDTMLMethod( container, id, title, data)
   elif meta_type == 'External Method':
     addExternalMethod( container, id, title, data)
@@ -83,6 +87,8 @@ def addObject(container, meta_type, id, title, data, permissions={}):
   elif meta_type == 'Image':
     addImage( container, id, title, data)
   elif meta_type == 'Page Template':
+    # Enforce to utf-8 unicode type
+    data = unicode(standard.pystr2(data),'utf-8','replace')
     addPageTemplate( container, id, title, data)
   elif meta_type == 'Script (Python)':
     addPythonScript( container, id, title, data)
