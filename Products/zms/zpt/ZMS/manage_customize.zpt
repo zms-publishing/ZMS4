@@ -3,9 +3,9 @@
 	standard modules/Products.zms/standard;
 	pilutil modules/Products.zms/pilutil;
 	filter_manager python:here.getFilterManager();">
-<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<head tal:replace="structure python:here.zmi_html_head(here,request)">zmi_html_head</head>
 <body tal:attributes="class python:here.zmi_body_class(id='customize config')">
-<tal:block tal:content="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</tal:block>
+<header tal:replace="structure python:here.zmi_body_header(here,request,options=here.customize_manage_options())">zmi_body_header</header>
 <div id="zmi-tab">
 	<tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request,extra=[{'action':'manage_customize','label':'TAB_SYSTEM'}])">zmi_breadcrumbs</tal:block>
 	<nav id="subTab">
@@ -15,12 +15,11 @@
 			<li class="nav-item"><a class="nav-link" id="Configuration-tab" href="#Configuration" data-toggle="tab" role="tab">Configuration</a></li>
 			<li class="nav-item"><a class="nav-link" id="Custom-tab" href="#Custom" data-toggle="tab" role="tab">System-Properties</a></li>
 			<li class="nav-item"><a class="nav-link" id="MediaDb-tab" href="#MediaDb" data-toggle="tab" role="tab">Media-Folder</a></li>
-			<li class="nav-item"><a class="nav-link" id="InstalledProducts-tab" href="#InstalledProducts" data-toggle="tab" role="tab">Installed Libraries</a></li>
-			<li class="nav-item"><a class="nav-link" id="Instance-tab" href="#Instance" data-toggle="tab" role="tab">Instance</a></li>
+			<li class="nav-item"><a class="nav-link" id="Info-tab" href="#Info" data-toggle="tab" role="tab">System-Info</a></li>
 		</ul>
 	</nav>
 	<div class="tab-content">
-		<div class="tab-pane fade active show" id="Manager" role="tabpanel">
+		<div class="tab-pane fade active show card" id="Manager" role="tabpanel">
 			<form class="form-horizontal card" title="Manager" name="ManagerForm" action="manage_customizeSystem" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
 				<input type="hidden" name="key" value="Manager" />
@@ -62,7 +61,7 @@
 			</form>
 		</div>
 
-		<div class="tab-pane fade" id="Clients" role="tabpanel">
+		<div class="tab-pane fade card" id="Clients" role="tabpanel">
 			<form class="form-horizontal card" title="Portal: Register the folder-ids of this site's master- and client-sites." name="ClientsForm" action="manage_customizeSystem" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
 				<input type="hidden" name="key" value="Clients" />
@@ -104,7 +103,7 @@
 			</form>
 		</div>
 
-		<div class="tab-pane fade" id="Configuration" role="tabpanel">
+		<div class="tab-pane fade card" id="Configuration" role="tabpanel">
 			<form class="form-horizontal card" title="Configuration: Import complete configuration packages with language-dictionaries, metadata-, special-object-, action- and filter-definitions contained in one single zip-archive."
 				name="ImportForm" action="manage_customizeSystem" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
@@ -122,9 +121,45 @@
 					</div>
 				</div><!-- .form-group -->
 			</form>
+			<form class="form-horizontal card" title="Configuration: Set parameters for Pillow"
+				name="ConfigForm" action="manage_customizeSystem" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
+				<input type="hidden" name="key" value="Configuration" />
+				<div class="form-group row" style="align-items:normal;">
+					<div class="col-sm-2 control-label">
+						<input type="checkbox" id="pil" disabled="disabled" value="1"
+						tal:attributes="checked python:['','checked'][int(pilutil.enabled())]"
+						class="form-check-input" />
+						<label class="form-check-label control-label">
+							<strong><a href="https://python-pillow.org/" target="_blank">Pillow</a></strong>
+						</label>
+					</div>
+					<div class="col-sm-10" tal:condition="python: pilutil.enabled()">
+						<div class="form-group form-inline">
+							<input type="text" id="pil_thumbnail_max" name="pil_thumbnail_max:int"
+								tal:attributes="value python:here.getConfProperty('InstalledProducts.pil.thumbnail.max')"
+								class="form-control form-control-sm mr-3" size="4" style="text-align:right;width:4rem" />
+							<label class="control-label" for="pil_thumbnail_max">
+								Max. Pixels for Automatic Resizing of High-Res to Base Images
+							</label>
+						</div>
+						<div class="form-group form-inline">
+							<input type="text" id="pil_hires_thumbnail_max" name="pil_hires_thumbnail_max:int"
+								tal:attributes="value python:here.getConfProperty('InstalledProducts.pil.hires.thumbnail.max')"
+								class="form-control form-control-sm mr-3"  size="4" style="text-align:right;width:4rem" />
+							<label class="control-label" for="pil_hires_thumbnail_max">
+								Max. Pixels for Automatic Resizing of Super-Res to High-Res Images
+							</label>
+						</div>
+						<div class="form-group form-inline">
+							<button name="btn" type="submit" class="btn btn-primary" value="Change" onclick="$('input[name=btn]:hidden').remove()">Change</button>
+						</div>
+					</div>
+				</div><!-- .form-group -->
+			</form>
 		</div>
 
-	<div class="tab-pane fade" id="Custom" role="tabpanel">
+	<div class="tab-pane fade card" id="Custom" role="tabpanel">
 		<form class="form-horizontal card" title="System-Properties" name="CustomForm" action="manage_customizeSystem" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
 		<input type="hidden" name="key" value="Custom" />
@@ -200,7 +235,7 @@
 					<tr tal:repeat="conf_key conf_keys" tal:attributes="class python:['','zmi-selected'][int(conf_key==request.get('conf_key'))]">
 						<td class="systemprop-delete">
 							<a tal:condition="python:conf_key not in conf" class="btn btn-secondary" tal:attributes="href python:'%s/manage_customize?lang=%s#Custom'%(here.getPortalMaster().absolute_url(),request['lang']); title python:'Edit'"><i class="fas fa-pencil-alt"></i></a>
-							<a tal:condition="python:conf_key in conf" class="btn btn-secondary" tal:attributes="href python:'manage_customizeSystem?lang=%s&amp;conf_key=%s&btn=Delete&key=Custom'%(request['lang'],conf_key); title python:'Delete'"><i class="fas fa-times text-danger"></i></a>
+							<a tal:condition="python:conf_key in conf" class="btn btn-secondary" tal:attributes="href python:'manage_customizeSystem?lang=%s&amp;conf_key=%s&btn=Delete&key=Custom#Custom'%(request['lang'],conf_key); title python:'Delete'"><i class="fas fa-times text-danger"></i></a>
 						</td>
 						<td class="systemprop-key">
 							<a class="zmi-code pt-1" tal:attributes="href python:'%s?lang=%s&amp;conf_key=%s#Custom'%(request['URL'],request['lang'],conf_key); title python:'Change'">
@@ -219,7 +254,7 @@
 		</form>
 		</div><!-- #System-Properties -->
 
-		<div class="tab-pane fade" id="MediaDb" role="tabpanel">
+		<div class="tab-pane fade card" id="MediaDb" role="tabpanel">
 			<form class="form-horizontal card" title="Media-Folder:Use the Media-Folder to store binary data of media (e.g. images, files) in the file-system of your server instead of ZODB."
 				name="CatalogForm" action="manage_customizeSystem" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
@@ -278,209 +313,54 @@
 			</form>
 		</div>
 
-		<div class="tab-pane fade" id="InstalledProducts" role="tabpanel">
-		<form class="form-horizontal card" title="Installed Libraries: Further python libraries and products extending ZMS."
-			name="InstalledProductsForm" action="manage_customizeSystem" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
-			<input type="hidden" name="key" value="InstalledProducts" />
-			<div class="form-group form-inline">
-				<div class="form-check col-sm-4 col-xs-6">
-					<input type="checkbox" id="pil" disabled="disabled" value="1" 
-					tal:attributes="checked python:['','checked'][int(pilutil.enabled())]" 
-					class="form-check-input" />
-					<label class="form-check-label control-label">
-						<b><a href="http://www.pythonware.com/products/pil/" target="_blank">PIL- Python Imaging Library</a></b>
-					</label>
-				</div>
-				<div class="col-sm-8 row  col-xs-6" tal:condition="python: pilutil.enabled()">
-					<div class="form-group form-inline mb-3">
-						<input type="text" id="pil_thumbnail_max" name="pil_thumbnail_max:int" 
-							tal:attributes="value python:here.getConfProperty('InstalledProducts.pil.thumbnail.max')" 
-							class="form-control form-control-sm mr-3" size="4" style="text-align:right;width:4rem" />
-						<label class="control-label" for="pil_thumbnail_max">
-							Max. Pixels for Automatic Resizing of High-Res to Base Images
-						</label>
-					</div>
-					<div class="form-group form-inline">
-						<input type="text" id="pil_hires_thumbnail_max" name="pil_hires_thumbnail_max:int" 
-							tal:attributes="value python:here.getConfProperty('InstalledProducts.pil.hires.thumbnail.max')" 
-							class="form-control form-control-sm mr-3"  size="4" style="text-align:right;width:4rem" />
-						<label class="control-label" for="pil_hires_thumbnail_max">
-							Max. Pixels for Automatic Resizing of Super-Res to High-Res Images
-						</label>
-					</div>
-				</div>
-			</div><!-- .form-group -->
-			<div class="form-group form-inline mb-5">
-				<div class="col-sm-4 col-xs-6">&nbsp;</div>
-				<div class="col-sm-8 col-xs-6 pl-0">
-					<button name="btn" type="submit" class="btn btn-primary" value="Change" onclick="$('input[name=btn]:hidden').remove()">Change</button>
-				</div>
-			</div><!-- .form-group -->
-			<div class="ajax-lazy-load" data-ajax-url="manage_customizeInstalledProducts"></div>
-		</form>
-		</div>
-
-		<div class="tab-pane fade" id="Instance" role="tabpanel">
-			<form class="form-horizontal card" title="Instance" name="InstanceForm" action="manage_customizeSystem" method="post" enctype="multipart/form-data">
+		<div class="tab-pane fade card" id="Info" role="tabpanel">
+			<form class="form-horizontal card" title="System-Info" name="InfoForm" action="manage_customizeSystem" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="lang" tal:attributes="value python:request['lang']" />
-				<input type="hidden" name="key" value="Instance" />
-				<input type="hidden" name="btn" value="Restart" />
+				<input type="hidden" name="key" value="Info" />
 				<div class="form-group row">
-					<label class="col-sm-4 control-label">ZMS Version</label>
-					<div class="col-sm-8">
-						<samp tal:content="python:here.zms_version()">zms_version</samp>
+					<label class="col-sm-2 control-label">ZMS Version</label>
+					<div class="col-sm-10">
+						<samp tal:content="structure python:here.zms_version()">zms_version</samp>
 					</div>
 				</div><!-- .form-group -->
 				<div class="form-group row">
-					<label class="col-sm-4 control-label">Instance Home</label>
-					<div class="col-sm-8">
+					<label class="col-sm-2 control-label">Instance Home</label>
+					<div class="col-sm-10">
 						<samp tal:content="python:here.getINSTANCE_HOME()">INSTANCE_HOME</samp>
 					</div>
 				</div><!-- .form-group -->
 				<div class="form-group row">
-					<label class="col-sm-4 control-label">Product Home</label>
-					<div class="col-sm-8">
+					<label class="col-sm-2 control-label">Product Home</label>
+					<div class="col-sm-10">
 						<samp tal:content="python:standard.getPRODUCT_HOME()">PROCUCT_HOME</samp>
 					</div>
 				</div><!-- .form-group -->
 				<div class="form-group row">
-					<label class="col-sm-4 control-label">Package Home</label>
-					<div class="col-sm-8">
+					<label class="col-sm-2 control-label">Package Home</label>
+					<div class="col-sm-10">
 						<samp tal:content="python:here.getPACKAGE_HOME()">PACKAGE_HOME</samp>
 					</div>
 				</div><!-- .form-group -->
-				<div class="form-group row">
-					<label class="col-sm-4 control-label"></label>
-					<div class="col-sm-8">
-						<button type="button" class="btn btn-primary" id="BTN_Restart">Restart</button>
+				<div class="form-group row" style="align-items:normal;">
+					<label class="col-sm-2 control-label" for="installed_python_packages">
+						Installed Python Packages
+						<p class="help-text small mt-sm-3 mb-0">
+							Tools such as the <a href="https://pip.pypa.io/en/stable/reference/pip/" target="_blank">Python Package Installer</a>
+							with <a href="https://pip.pypa.io/en/stable/user_guide/#requirements-files" target="_blank">requirements</a>
+							and <a href="https://pip.pypa.io/en/stable/user_guide/#constraints-files" target="_blank">constraints</a> files
+							and <a href="https://requires.io/github/zopefoundation/Zope/requirements/?branch=master" target="_blank">requires.io</a>
+							help manage and monitor package dependencies.
+						</p>
+					</label>
+					<div class="col-sm-10">
+						<div class="ajax-lazy-load" data-ajax-url="manage_customizeInstalledProducts"></div>
 					</div>
 				</div><!-- .form-group -->
 			</form>
 		</div>
 	</div>
 
-<tal:block tal:on-error="structure string:<!-- ERROR: ZMSExtensionUtility -->">
-<style>
-.popover { 
-	max-width : 100%;
-}
-.nav-pills {
-	border:1px #ddd solid;
-	border-radius: 4px;
-	background-color: rgb(250, 250, 250);
-}
-.nav-pills li a:hover {
-	background-color: #eee;
-}
-.nav-pills .badge {
-	background-color: #ccc;
-}
-.nav-pills .active>a>.badge {
-	background-color: #fff;
-}
-</style>
-<script>
-$(function() {
-	$("i[class*='icon-cloud-download']").parent().popover({
-		html: true
-	});	 
-	$("i[class*='icon-info-circle']").parent().popover({
-		html: true
-	}); 
-	$("i[class*='icon-warning-sign']").parent().popover({
-		html: true
-	}); 
-	$("i[class*='icon-hdd']").parent().popover({
-		html: true
-	}); 
-	$("button[class*='btn btn-primary']").click(function() {
-		if ($(this).text()!='Change') {
-			$(this).html("Installing..."+" <"+"i class='icon-spin icon-spinner fas fa-spinner fa-spin'"+"><"+"/i"+">");
-		}
-	}); 
-	$("i[class^='ImportExample icon-upload']").click(function() {
-			var btn = $(this);
-			var res = confirm("Import Example?\n\nHINT:\nYou can configure the parameter {ZMS.Examples} at ZMS > Configuration > System > Miscellaneous with a link to the desired import destination (default is the instance's root element).");
-			if (res == true) {
-				btn.toggleClass("icon-upload icon-spin icon-spinner fas fa-spinner fa-spin");
-				btn.unbind("click");
-				btn.unbind("mouseenter");
-				btn.unbind("mouseleave");
-				$.ajax({
-					type : 'POST',
-					url : 'manage_customizeSystem',
-					data : {key:'InstalledProducts', btn:'ImportExample', zmsext:btn.data('zmsext'), lang:getZMILang()}
-				}).done(function(data) {
-						if (data == "True") {
-							btn.toggleClass("icon-ok-sign icon-spin icon-spinner fas fa-spinner fa-spin");
-							btn.css("color", "#5cb85c");
-							btn.parent().attr("href", btn.parent().data("link"));
-							btn.parent().attr("title", "Go to Example...");
-						}
-						else {
-							btn.toggleClass("icon-exclamation-circle icon-spin icon-spinner fas fa-spinner fa-spin");
-							btn.css("color", "#d9534f");
-							btn.parent().attr("title", "An Error occured!");
-						}
-					});
-			}
-	});
-	$("i[class^='InstallTheme icon-upload']").click(function() {
-			var btn = $(this);
-			var res = confirm("Install Theme?");
-			if (res == true) {
-				btn.toggleClass("icon-upload icon-spin icon-spinner fas fa-spinner fa-spin");
-				btn.unbind("click");
-				btn.unbind("mouseenter");
-				btn.unbind("mouseleave");
-				$.ajax({
-					type : 'POST',
-					url : 'manage_customizeSystem',
-					data : {key:'InstalledProducts', btn:'InstallTheme', zmsext:btn.data('zmsext'), lang:getZMILang()}
-				}).done(function(data) {
-						if (data == "True") {
-							btn.toggleClass("icon-ok-sign icon-spin icon-spinner fas fa-spinner fa-spin");
-							btn.css("color", "#5cb85c");
-							btn.parent().attr("href", btn.parent().data("link"));
-							btn.parent().attr("title", "Go to Theme...");
-						}
-						else {
-							btn.toggleClass("icon-exclamation-circle icon-spin icon-spinner fas fa-spinner fa-spin");
-							btn.css("color", "#d9534f");
-							btn.parent().attr("title", "An Error occured!");
-						}
-					});
-			}
-	});
-	$("#InstalledProducts i[class*='icon']").mouseenter(function() {
-		$(this).css("color", "#3071a9");
-	});
-	$("#InstalledProducts i[class*='icon']").mouseleave(function() {
-		$(this).css("color", "#428bca");
-	});	
-	$("#InstalledProducts i[class*='icon-info-circle']").mouseleave(function() {
-		$(this).css("color", "#ccc");
-	});
-	$('#BTN_Restart').click(function() {
-		$.ajax({
-			type : 'POST',
-			url : 'manage_customizeSystem',
-			data : {key:'Instance', btn:'Restart', lang:getZMILang()}
-		}).done(function(data) {
-				$('#BTN_Restart').prop("disabled", true);
-				var spinner = "";
-				if (data!='No daemon.') {
-					spinner = " <"+"i class='icon-spin icon-spinner fas fa-spinner fa-spin'"+"><"+"/i"+">";
-				}
-				$('#BTN_Restart').html(data + spinner)
-			});
-	});
-});
-</script>
-</tal:block>
-
 </div><!-- #zmi-tab -->
-<tal:block tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</tal:block>
+<footer tal:content="structure python:here.zmi_body_footer(here,request)">zmi_body_footer</footer>
 </body>
 </html>

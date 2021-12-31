@@ -272,6 +272,16 @@ def set_response_headers(fn, mt='application/octet-stream', size=None, request=N
   RESPONSE.setHeader('Accept-Ranges', 'bytes')
 
 
+security.declarePublic('get_installed_packages')
+def get_installed_packages():
+  import subprocess
+  pipfreeze = subprocess.Popen("../../../bin/pip freeze --all",
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               shell=True, cwd=getPACKAGE_HOME(), universal_newlines=True)
+  packages = pipfreeze.communicate()[0].strip()
+  return packages
+
+
 security.declarePublic('umlaut_quote')
 def umlaut_quote(s, mapping={}):
   """
