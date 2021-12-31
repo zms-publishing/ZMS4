@@ -91,6 +91,21 @@ if six.PY2:
       else:
         object = unicode(object)
     return object
+
+  security.declarePublic('pystr2')
+  pystr2_ = str
+  def pystr2(v, encoding='utf-8', errors='replace'):
+    if isinstance(v, unicode):
+      v = v.encode('utf-8',errors) 
+    elif isinstance(v, str):
+      v = unicode(v,'utf-8', errors).encode('utf-8',errors)
+    else:
+      try:
+        v = v.encode('utf-8',errors)
+      except:
+        pass
+    return v
+
   def pybytes(object, encoding='utf-8', errors='strict'):
     if is_str(object):
       object = object.encode(encoding,errors)
