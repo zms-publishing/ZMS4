@@ -74,11 +74,11 @@ def addObject(container, meta_type, id, title, data, permissions={}):
   """
   if meta_type == 'DTML Document':
     # Enforce to utf-8 text
-    data = standard.pystr2(data, encoding='utf-8', errors='replace').encode('utf-8')
+    data = standard.pystr2(data, encoding='utf-8', errors='ignore').encode('utf-8')
     addDTMLDocument( container, id, title, data)
   elif meta_type == 'DTML Method':
     # Enforce to utf-8 text
-    data = standard.pystr2(data, encoding='utf-8', errors='replace').encode('utf-8')
+    data = standard.pystr2(data, encoding='utf-8', errors='ignore').encode('utf-8')
     addDTMLMethod( container, id, title, data)
   elif meta_type == 'External Method':
     addExternalMethod( container, id, title, data)
@@ -88,7 +88,7 @@ def addObject(container, meta_type, id, title, data, permissions={}):
     addImage( container, id, title, data)
   elif meta_type == 'Page Template':
     # Enforce to utf-8 text
-    data = standard.pystr2(data, encoding='utf-8', errors='replace').encode('utf-8')
+    data = standard.pystr2(data, encoding='utf-8', errors='ignore').encode('utf-8')
     addPageTemplate( container, id, title, data)
   elif meta_type == 'Script (Python)':
     addPythonScript( container, id, title, data)
