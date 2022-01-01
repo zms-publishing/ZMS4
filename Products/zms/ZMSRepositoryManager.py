@@ -220,28 +220,15 @@ class ZMSRepositoryManager(
         l_data = l.get('data')
         r = remote.get(filename, {})
         r_data = r.get('data')
-        if isinstance(l_data, bytes):
-          try:
-            l['data'] = l_data.decode('utf-8')
-          except: # data is no text, but image etc.
-            pass
-        if isinstance(r_data, bytes):
-          try:
-            r['data'] = r_data.decode('utf-8')
-          except:
-            pass
-        # Normalize Windows CR+LF line break to Unix LF in string objects
-        if isinstance(l.get('data'), (str,unicode)):
-          l['data'] = l['data'].replace('\r\n','\n')
-        if isinstance(r.get('data'), (str,unicode)):
-          r['data'] = r['data'].replace('\r\n','\n')
+        # l['data'] = unicode(standard.pystr2(l_data,'utf-8','ignore'))
+        # r['data'] = unicode(standard.pystr2(r_data,'utf-8','ignore'))
+
+        if isinstance(l['data'],(str,unicode)):
+          l['data'] = l['data'].replace('\r','')
+          r['data'] = r['data'].replace('\r','')
+
         if l.get('data') != r.get('data'):
           data = l_data or r_data
-          if isinstance(data, (str,unicode)):
-            try:
-              data = data.encode('utf-8')
-            except:
-              pass
           mt, enc = standard.guess_content_type(filename.split('/')[-1], data)
           diff.append((filename, mt, l.get('id', r.get('id', '?')), l, r))
       return diff
