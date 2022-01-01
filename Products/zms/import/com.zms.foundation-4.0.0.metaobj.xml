@@ -86,7 +86,7 @@
                   <item key="multilang" type="int">0</item>
                   <item key="name"><![CDATA[Level]]></item>
                   <item key="repetitive" type="int">0</item>
-                  <item key="type"><![CDATA[?]]></item>
+                  <item key="type"><![CDATA[levelnfc]]></item>
                 </dictionary>
               </item>
               <item type="dictionary">
@@ -172,7 +172,7 @@
                   <item key="multilang" type="int">1</item>
                   <item key="name"><![CDATA[DC.Creator]]></item>
                   <item key="repetitive" type="int">0</item>
-                  <item key="type"><![CDATA[?]]></item>
+                  <item key="type"><![CDATA[attr_dc_creator]]></item>
                 </dictionary>
               </item>
               <item type="dictionary">
@@ -496,7 +496,7 @@ if 'permalink_key__' in request and 'permalink_val__' in request:
                   <item key="multilang" type="int">0</item>
                   <item key="name"><![CDATA[Level]]></item>
                   <item key="repetitive" type="int">0</item>
-                  <item key="type"><![CDATA[?]]></item>
+                  <item key="type"><![CDATA[levelnfc]]></item>
                 </dictionary>
               </item>
               <item type="dictionary">
@@ -582,7 +582,7 @@ if 'permalink_key__' in request and 'permalink_val__' in request:
                   <item key="multilang" type="int">1</item>
                   <item key="name"><![CDATA[DC.Creator]]></item>
                   <item key="repetitive" type="int">0</item>
-                  <item key="type"><![CDATA[?]]></item>
+                  <item key="type"><![CDATA[attr_dc_creator]]></item>
                 </dictionary>
               </item>
               <item type="dictionary">
@@ -1362,7 +1362,7 @@ return ''
                   <item key="multilang" type="int">0</item>
                   <item key="name"><![CDATA[Level]]></item>
                   <item key="repetitive" type="int">0</item>
-                  <item key="type"><![CDATA[?]]></item>
+                  <item key="type"><![CDATA[levelnfc]]></item>
                 </dictionary>
               </item>
               <item type="dictionary">
@@ -1448,7 +1448,7 @@ return ''
                   <item key="multilang" type="int">1</item>
                   <item key="name"><![CDATA[DC.Creator]]></item>
                   <item key="repetitive" type="int">0</item>
-                  <item key="type"><![CDATA[?]]></item>
+                  <item key="type"><![CDATA[attr_dc_creator]]></item>
                 </dictionary>
               </item>
               <item type="dictionary">
@@ -3097,7 +3097,7 @@ $(function(){
                   <item key="multilang" type="int">1</item>
                   <item key="name"><![CDATA[DC.Creator]]></item>
                   <item key="repetitive" type="int">0</item>
-                  <item key="type"><![CDATA[?]]></item>
+                  <item key="type"><![CDATA[attr_dc_creator]]></item>
                 </dictionary>
               </item>
               <item type="dictionary">

@@ -42,7 +42,8 @@ Get class from py-string.
 ######
 # ZMS4
 def get_class(py):
-	if isinstance(py,bytes):
+	if isinstance(py,(str,bytes)):
+		# transform to unicode-type
 		py = py.decode('utf-8')
 	id = re.findall('class (.*?):', py)[0]
 	try:
@@ -68,15 +69,16 @@ def remoteFiles(self, basepath):
 					# Read python-representation of repository-object
 					standard.writeLog(self,"[remoteFiles]: read %s"%filepath)
 					f = open(filepath,"rb")
-					py = standard.pystr(f.read())
+					# py = standard.pystr(f.read())
+					py = f.read()
 					f.close()
 					# Analyze python-representation of repository-object
 					d = {}
 					try:
-							c = get_class(py)
-							d = c.__dict__
+						c = get_class(py)
+						d = c.__dict__
 					except:
-							d['revision'] = standard.writeError(self,"[traverse]: can't analyze filepath=%s"%filepath)
+						d['revision'] = standard.writeError(self,"[traverse]: can't analyze filepath=%s"%filepath)
 					id = d.get('id',name)
 					rd = {}
 					rd['id'] = id
@@ -88,16 +90,16 @@ def remoteFiles(self, basepath):
 					for file in [x for x in names if x != name and not x.startswith('.')]:
 						artefact = os.path.join(path,file)
 						if os.path.isfile(artefact):
-								standard.writeLog(self,"[remoteFiles]: read artefact %s"%artefact)
-								f = open(artefact,"rb")
-								data = f.read()
-								f.close()
-								rd = {}
-								rd['id'] = id
-								rd['filename'] = artefact[len(base)+1:]
-								rd['data'] = data
-								rd['version'] = self.getLangFmtDate(os.path.getmtime(artefact),'eng')
-								r[rd['filename']] = rd
+							standard.writeLog(self,"[remoteFiles]: read artefact %s"%artefact)
+							f = open(artefact,"rb")
+							data = f.read()
+							f.close()
+							rd = {}
+							rd['id'] = id
+							rd['filename'] = artefact[len(base)+1:]
+							rd['data'] = data
+							rd['version'] = self.getLangFmtDate(os.path.getmtime(artefact),'eng')
+							r[rd['filename']] = rd
 		traverse(basepath,basepath)
 	return r
 
@@ -124,10 +126,10 @@ def readRepository(self, basepath, deep=True):
 					# Analyze python-representation of repository-object
 					d = {}
 					try:
-							c = get_class(py)
-							d = c.__dict__
+						c = get_class(py)
+						d = c.__dict__
 					except:
-							d['revision'] = standard.writeError(self,"[readRepository]: ")
+						d['revision'] = standard.writeError(self,"[readRepository]: ")
 					id = d.get('id',name)
 					r[id] = {}
 					for k in [x for x in d if not x.startswith('__')]:
@@ -147,10 +149,10 @@ def readRepository(self, basepath, deep=True):
 										data = f.read()
 										f.close()
 										try:
-												if isinstance(data, bytes):
-														data = data.decode('utf-8')
+											if isinstance(data, bytes):
+												data = data.decode('utf-8')
 										except:
-												pass
+											pass
 										vv['data'] = data
 										break
 								v.append((py.find('\t\t%s ='%kk), vv))
