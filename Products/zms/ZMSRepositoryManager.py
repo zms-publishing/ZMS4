@@ -100,9 +100,9 @@ class ZMSRepositoryManager(
 
 
     """
-    Returns direction of copying config files: 
+    Returns direction of copying config files:
     Loading from file system (coloring ZMS changes) vs.
-	Saving to file system (coloring filesystem changes)
+    Saving to file system (coloring filesystem changes)
     """
     def get_update_direction(self):
       return getattr(self,'update_direction','Loading')
@@ -164,7 +164,7 @@ class ZMSRepositoryManager(
     def exec_auto_update(self):
       #-- [ReqBuff]: Fetch buffered value from Http-Request.
       reqBuffId = 'ZMSRepositoryManager.exec_auto_update'
-      try: 
+      try:
         return self.fetchReqBuff(reqBuffId)
       except:
         #-- [ReqBuff]: Returns value and stores it in buffer of Http-Request.
@@ -220,15 +220,26 @@ class ZMSRepositoryManager(
         l_data = l.get('data')
         r = remote.get(filename, {})
         r_data = r.get('data')
-        # l['data'] = unicode(standard.pystr2(l_data,'utf-8','ignore'))
-        # r['data'] = unicode(standard.pystr2(r_data,'utf-8','ignore'))
-
-        if isinstance(l['data'],(str,unicode)):
-          l['data'] = l['data'].replace('\r','')
-          r['data'] = r['data'].replace('\r','')
-
+        # Try normalizing text codes to cleaned utf-8 
+        if isinstance(l.get('data'),(str,bytes)):
+          try:
+            l['data'] = standard.pystr2(l['data']).decode('utf-8')
+          except:
+            pass
+        if isinstance(r.get('data'),(str,bytes)):
+          try:
+            r['data'] = standard.pystr2(r['data']).decode('utf-8')
+          except:
+            pass
+        # Try normalizing line breaks 
+          try:
+            l['data'] = l['data'].replace('\r','')
+            r['data'] = r['data'].replace('\r','')
+          except:
+            pass
+        # Compare the the two sides
         if l.get('data') != r.get('data'):
-          data = l_data or r_data
+          data = l.get('data') or r.get('data')
           mt, enc = standard.guess_content_type(filename.split('/')[-1], data)
           diff.append((filename, mt, l.get('id', r.get('id', '?')), l, r))
       return diff
@@ -272,6 +283,8 @@ class ZMSRepositoryManager(
                   fileexts = {'DTML Method':'.dtml', 'DTML Document':'.dtml', 'External Method':'.py', 'Page Template':'.zpt', 'Script (Python)':'.py', 'Z SQL Method':'.zsql'}
                   fileprefix = i['id'].split('/')[-1]
                   data = zopeutil.readData(ob)
+                  # if type(data) is unicode:
+                  #   data = standard.pystr2(data)
                   version = ''
                   if hasattr(ob,'_p_mtime'):
                     version = standard.getLangFmtDate(DateTime(ob._p_mtime).timeTime(), 'eng')
@@ -295,7 +308,10 @@ class ZMSRepositoryManager(
         d['id'] = id
         d['filename'] = os.path.sep.join(filename)
         d['data'] = '\n'.join(py)
-        d['version'] = [int(x) for x in o.get('revision', '0.0.0').split('.')]
+        try:
+          d['version'] = [int(x) for x in o.get('revision', '0.0.0').split('.')]
+        except:
+          d['version'] = [0,0,0]
         d['meta_type'] = 'Script (Python)'
         l[d['filename']] = d
       return l
@@ -355,12 +371,10 @@ class ZMSRepositoryManager(
               data = files[file]['data']
               if data is not None:
                 f = open(filepath,"wb")
-                if isinstance(data,str):
-                  try:
-                    data = data.encode("utf-8")
-                  except:
-                    pass
-                f.write(data)
+                try:
+                  f.write(data.encode('utf-8'))
+                except:
+                  f.write(data)
                 f.close()
               else:
                 failure.append('%s is None'%file)
