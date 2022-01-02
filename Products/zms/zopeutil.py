@@ -73,12 +73,18 @@ def addObject(container, meta_type, id, title, data, permissions={}):
   Add Zope-object to container.
   """
   if meta_type == 'DTML Document':
-    # Enforce to utf-8 text
-    data = standard.pystr2(data, encoding='utf-8', errors='ignore').encode('utf-8')
+    # Enforce to utf-8 text, try Zope2, except Zope4
+    try:
+      data = standard.pystr2(data, 'utf-8', 'ignore').encode('utf-8')
+    except:
+      data = standard.pystr2(data, 'utf-8', 'ignore')
     addDTMLDocument( container, id, title, data)
   elif meta_type == 'DTML Method':
-    # Enforce to utf-8 text
-    data = standard.pystr2(data, encoding='utf-8', errors='ignore').encode('utf-8')
+    # Enforce to utf-8 text, try Zope2, except Zope4
+    try:
+      data = standard.pystr2(data, 'utf-8', 'ignore').encode('utf-8')
+    except:
+      data = standard.pystr2(data, 'utf-8', 'ignore')
     addDTMLMethod( container, id, title, data)
   elif meta_type == 'External Method':
     addExternalMethod( container, id, title, data)
@@ -87,8 +93,11 @@ def addObject(container, meta_type, id, title, data, permissions={}):
   elif meta_type == 'Image':
     addImage( container, id, title, data)
   elif meta_type == 'Page Template':
-    # Enforce to utf-8 text
-    data = standard.pystr2(data, encoding='utf-8', errors='ignore').encode('utf-8')
+    # Enforce to utf-8 text, try Zope2, except Zope4
+    try:
+      data = standard.pystr2(data, 'utf-8', 'ignore').encode('utf-8')
+    except:
+      data = standard.pystr2(data, 'utf-8', 'ignore')
     addPageTemplate( container, id, title, data)
   elif meta_type == 'Script (Python)':
     addPythonScript( container, id, title, data)
