@@ -15,7 +15,7 @@ def manage_repository_gitpull(self, request=None):
 	if came_from.find('?') > 0:
 		came_from = came_from[:came_from.find('?')]
 	base_path = self.get_conf_basepath()
-	branch = self.getConfProperty('ZMSRepository.git.server.branch','master').replace('"','').replace(';','')
+	branch = self.getConfProperty('ZMSRepository.git.server.branch','main').replace('"','').replace(';','')
 	hardreset_cmd = 'git reset --hard origin/%s'%(branch)
 
 	html.append('<!DOCTYPE html>')
@@ -97,7 +97,7 @@ def manage_repository_gitpull(self, request=None):
 	return '\n'.join(html)]]>
       </item>
       <item key="description"></item>
-      <item key="execution" type="int">False</item>
+      <item key="execution" type="int">0</item>
       <item key="icon_clazz"><![CDATA[fas fa-backward]]></item>
       <item key="id"><![CDATA[manage_repository_gitpull]]></item>
       <item key="meta_type"><![CDATA[External Method]]></item>
@@ -107,7 +107,7 @@ def manage_repository_gitpull(self, request=None):
         </list>
       </item>
       <item key="name"><![CDATA[BTN_GITPULL]]></item>
-      <item key="revision"><![CDATA[4.0.0]]></item>
+      <item key="revision"><![CDATA[4.0.3]]></item>
       <item key="roles" type="list">
         <list>
           <item><![CDATA[ZMSAdministrator]]></item>
@@ -153,7 +153,7 @@ def manage_repository_gitpush(self, request=None):
 			userid = str(request.get('AUTHENTICATED_USER'))[0:3]
 			os.chdir(base_path)
 			command1 = 'git add .'
-			command2 = 'git commit -a -m "%s (%s)"'%(request.get('message').replace('"','').replace(';',''), userid)
+			command2 = 'git commit -a -S -m "%s (%s)"'%(request.get('message').replace('"','').replace(';',''), userid)
 			command3 = 'git push'
 			result1 = os.system(command1)
 			message.append('<code class="d-block">%s [%s]</code>'%(command1, str(result1)))
@@ -178,7 +178,7 @@ def manage_repository_gitpush(self, request=None):
 		html.append('<div class="card-body">')
 		html.append('<div class="form-group row">')
 		html.append('<label for="message" class="col-sm-2 control-label mandatory">Message</label>')
-		html.append('<div class="col-sm-10"><input class="form-control" name="message" type="text" size="25" value="" placeholder="Enter commit message here"></div>')
+		html.append('<div class="col-sm-10"><input class="form-control" name="message" type="text" size="25" value="ZBSZMS5-44: ..." title="Enter commit message starting width Jira-Ticket Number" placeholder="Enter commit message starting width Jira-Ticket Number" /></div>')
 		html.append('</div><!-- .form-group -->')
 		html.append('<div class="form-group">')
 		html.append('<div class="controls save">')
@@ -201,7 +201,7 @@ def manage_repository_gitpush(self, request=None):
 	return '\n'.join(html)]]>
       </item>
       <item key="description"></item>
-      <item key="execution" type="int">False</item>
+      <item key="execution" type="int">0</item>
       <item key="icon_clazz"><![CDATA[fas fa-forward]]></item>
       <item key="id"><![CDATA[manage_repository_gitpush]]></item>
       <item key="meta_type"><![CDATA[External Method]]></item>
@@ -211,7 +211,7 @@ def manage_repository_gitpush(self, request=None):
         </list>
       </item>
       <item key="name"><![CDATA[BTN_GITPUSH]]></item>
-      <item key="revision"><![CDATA[4.0.0]]></item>
+      <item key="revision"><![CDATA[4.0.3]]></item>
       <item key="roles" type="list">
         <list>
           <item><![CDATA[ZMSAdministrator]]></item>
@@ -310,7 +310,7 @@ def manage_repository_gitconfig(self, request=None):
 		html.append('</div><!-- .form-group -->')
 		html.append('<div class="form-group row">')
 		html.append('<label for="branch" class="col-sm-2 control-label mandatory">Branch Name</label>')
-		html.append('<div class="col-sm-10"><input class="form-control" name="branch" placeholder="master" type="text" size="25" value="%s"></div>'%self.getConfProperty('ZMSRepository.git.server.branch','master'))
+		html.append('<div class="col-sm-10"><input class="form-control" name="branch" placeholder="master" type="text" size="25" value="%s"></div>'%self.getConfProperty('ZMSRepository.git.server.branch','main'))
 		html.append('</div><!-- .form-group -->')
 		html.append('<div class="form-group row">')
 		html.append('<div class="controls save">')
@@ -349,7 +349,7 @@ def manage_repository_gitconfig(self, request=None):
         </list>
       </item>
       <item key="name"><![CDATA[TAB_CONFIGURATION]]></item>
-      <item key="revision"><![CDATA[4.0.2]]></item>
+      <item key="revision"><![CDATA[4.0.3]]></item>
       <item key="roles" type="list">
         <list>
           <item><![CDATA[ZMSAdministrator]]></item>
