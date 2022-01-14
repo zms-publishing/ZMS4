@@ -108,7 +108,7 @@ def manage_collect_zope_artifacts(self, request=None):
 			x['path'],
 			x['path'],
 			x['node'].meta_type,
-			x['node'].get('zmi_icon','far fa-file'),
+			'far fa-file',
 			x['path'],
 			'<br>'.join(x['status']),
 			) for x in t]))
