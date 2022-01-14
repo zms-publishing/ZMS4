@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <list>
   <item type="dictionary">
@@ -68,7 +68,7 @@ def manage_collect_zope_artifacts(self, request=None):
 
 	# --- Cancel.
 	# ---------------------------------
-	if btn==self.getZMILangStr('BTN_CANCEL'):
+	if btn=='BTN_CANCEL':
 		request.response.redirect(self.url_append_params(came_from,{'lang':request['lang']}))
 
 	# --- Form.
@@ -87,9 +87,9 @@ def manage_collect_zope_artifacts(self, request=None):
 
 	rtn.append('<div class="form-group">')
 	rtn.append('<div class="col-12 save">')
-	rtn.append('<button type="submit" name="btn" class="btn btn-primary" value="Collect">%s</button>'%('Collect'))
-	rtn.append('<button type="submit" name="btn" class="btn btn-default" value="BTN_REFRESH">%s</button>'%(self.getZMILangStr('BTN_REFRESH')))
-	rtn.append('<button type="submit" name="btn" class="btn btn-default" value="BTN_CANCEL">%s</button>'%(self.getZMILangStr('BTN_CANCEL')))
+	rtn.append('<button type="submit" name="btn" class="btn btn-primary" value="Collect">Collect</button>')
+	rtn.append('<button type="submit" name="btn" class="btn btn-secondary" value="BTN_REFRESH">Refresh</button>')
+	rtn.append('<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CANCEL">Cancel</button>')
 	rtn.append('</div><!-- .col-12 -->')
 	rtn.append('</div><!-- .form-group -->')
 
@@ -97,8 +97,8 @@ def manage_collect_zope_artifacts(self, request=None):
 	rtn.append('<thead>')
 	rtn.append('<tr>')
 	rtn.append('''<th class="text-center">
-					<span class="btn btn-default" title="%s/%s" onclick="zmiToggleSelectionButtonClick(this)"><i class="icon-check fas fa-check"></i></span>
-				</th>'''%(self.getZMILangStr('BTN_SLCTALL'),self.getZMILangStr('BTN_SLCTNONE')))
+					<span class="btn btn-default" title="Select All/None" onclick="zmiToggleSelectionButtonClick(this)"><i class="icon-check fas fa-check"></i></span>
+				</th>''')
 	rtn.append('<th class="w-100">Objekt</th>')
 	rtn.append('<th>Status</th>')
 	rtn.append('</tr>')
@@ -108,7 +108,7 @@ def manage_collect_zope_artifacts(self, request=None):
 			x['path'],
 			x['path'],
 			x['node'].meta_type,
-			x['node'].zmi_icon,
+			x['node'].get('zmi_icon','far fa-file'),
 			x['path'],
 			'<br>'.join(x['status']),
 			) for x in t]))
@@ -123,19 +123,21 @@ def manage_collect_zope_artifacts(self, request=None):
 		rtn.append(self.zmi_body_footer(self,request))
 	except:
 		rtn.append('<pre>ERROR:zmi_body_footer</pre>')
-	rtn.append("""<script>$(function() {
-	$(".table tr").each(function() {
-			var $tr = $(this);
-			if ($(".state.bg-success,.arrow-left",$tr).length > 0) {
-				$("input:checkbox",$tr).remove();
-				$tr.addClass("bg-danger");
+	rtn.append("""
+		<script>$(function() {
+			$(".table tr").each(function() {
+					var $tr = $(this);
+					if ($(".state.bg-success,.arrow-left",$tr).length > 0) {
+						$("input:checkbox",$tr).remove();
+						$tr.addClass("bg-danger");
+					}
+				});
+			var can_commit = $(".table tr input:checkbox:visible").length > 0;
+			if (!can_commit) {
+				$("#Commit-message,#toggle-checkboxes,button[value='Commit']").hide();
 			}
-		});
-	var can_commit = $(".table tr input:checkbox:visible").length > 0;
-	if (!can_commit) {
-		$("#Commit-message,#toggle-checkboxes,button[value='Commit']").hide();
-	}
-});</script>""")
+		});</script>
+	""")
 	try:
 		rtn.append(Navigation.manage_page_footer(self,request))
 	except:
@@ -147,19 +149,19 @@ def manage_collect_zope_artifacts(self, request=None):
       </item>
       <item key="description"></item>
       <item key="execution" type="int">0</item>
-      <item key="icon_clazz">icon-briefcase fas fa-briefcase</item>
-      <item key="id">manage_collect_zope_artifacts</item>
+      <item key="icon_clazz"><![CDATA[fas fa-briefcase text-primary]]></item>
+      <item key="id"><![CDATA[manage_collect_zope_artifacts]]></item>
       <item key="meta_type"><![CDATA[External Method]]></item>
       <item key="meta_types" type="list">
         <list>
-          <item>ZMS</item>
+          <item><![CDATA[ZMS]]></item>
         </list>
       </item>
       <item key="name"><![CDATA[Collect Zope Artifacts...]]></item>
-      <item key="revision">4.0.0</item>
+      <item key="revision"><![CDATA[4.0.1]]></item>
       <item key="roles" type="list">
         <list>
-          <item>ZMSAdministrator</item>
+          <item><![CDATA[ZMSAdministrator]]></item>
         </list>
       </item>
       <item key="title"><![CDATA[Transfer Zope Artifacts to a ZMS Content-Object Library]]></item>
