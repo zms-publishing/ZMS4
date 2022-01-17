@@ -241,7 +241,10 @@ def manage_repository_gitstatus( self ):
 
 	if btn=='BTN_CANCEL':
 		request.response.redirect(self.url_append_params(came_from,{'lang':request['lang']}))
-
+	elif btn=='BTN_GITPULL':
+		request.response.redirect('manage_repository_gitpull')
+	elif btn=='BTN_GITPUSH':
+		request.response.redirect('manage_repository_gitpush')
 	else:
 		# --- Display form.
 		# -------------------------
@@ -293,6 +296,8 @@ def manage_repository_gitstatus( self ):
 		html.append('<div class="card-body">')
 		html.append('<div class="form-group row">')
 		html.append('<div class="controls save">')
+		html.append('<button type="submit" name="btn" class="btn btn-danger" value="BTN_GITPULL"><i class="fas fa-backward"></i>&nbsp;&nbsp;Git Pull</button> ')
+		html.append('<button type="submit" name="btn" class="btn btn-success" value="BTN_GITPUSH"><i class="fas fa-forward"></i>&nbsp;&nbsp;Git Push</button> ')
 		html.append('<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CANCEL">Cancel</button>')
 		html.append('</div>')
 		html.append('</div><!-- .form-group -->')
