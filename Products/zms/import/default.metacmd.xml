@@ -100,16 +100,11 @@ return '\n'.join(prt)
   </item>
   <item type="dictionary">
     <dictionary>
-      <item key="data"><![CDATA[<!-- Page Template Diagnostics
- Compilation failed
- zope.tal.taldefs.TALError: Python expression error:
-invalid syntax (PythonExpr, line 1) in expression u"python:[[x,here.display_type(request,x)] for x in here.getMetaobjIds(excl_ids=['ZMS']])", at line 26, column 4
--->
-<!DOCTYPE html>
+      <item key="data"><![CDATA[<!DOCTYPE html>
 <html lang="en" tal:define="standard modules/Products.zms/standard">
-<tal:block tal:content="structure python:here.zmi_html_head(here,request)">zmi_html_head</tal:block>
+<head tal:replace="structure python:here.zmi_html_head(here,request)">zmi_html_head</head>
 <body tal:attributes="class python:here.zmi_body_class(id='search')">
-<tal:block tal:content="structure python:here.zmi_body_header(here,request)">zmi_body_header</tal:block>
+<header tal:replace="structure python:here.zmi_body_header(here,request)">zmi_body_header</header>
 <div id="zmi-tab" class="pb-4">
 <tal:block tal:content="structure python:here.zmi_breadcrumbs(here,request)">zmi_breadcrumbs</tal:block>
 
@@ -130,7 +125,7 @@ invalid syntax (PythonExpr, line 1) in expression u"python:[[x,here.display_type
 		</div><!-- .form-group -->
 
 		<tal:comment replace="nothing">
-			<div class="form-group row" tal:define="global optpl python:[[x,here.display_type(request,x)] for x in here.getMetaobjIds(excl_ids=['ZMS']])">
+			<div class="form-group row" tal:define="global optpl python:[[x,here.display_type(request,x)] for x in here.getMetaobjIds(excl_ids=['ZMS'])]">
 				<div class="col-sm-9 col-md-10" tal:content="structure python:here.zmi_input_multiselect(here,name='search_meta_types',value=request.get('search_meta_types',[]),type='multiselect',lang_str='ATTR_TYPE',options=optpl)">the control</div>
 			</div><!-- .form-group -->
 		</tal:comment>
@@ -166,13 +161,13 @@ invalid syntax (PythonExpr, line 1) in expression u"python:[[x,here.display_type
 
 		<!-- @TODO: ZMSIndex-based -->
 		<tal:block tal:condition="python:not request.get('raw') and request.get('search_meta_types')">
-			<tal:block tal:define="global dummy0 python:qres.extend([{ \
-					'ob':x, \
-					'title':x.getTitle(request), \
-					'raw':x.renderShort(request), \
-					'score':1, \
-					'time':x.attr('change_dt'), \
-					'url':'%s/manage_main'%x.absolute_url(), \
+			<tal:block tal:define="global dummy0 python:qres.extend([{ 
+					'ob':x, 
+					'title':x.getTitle(request), 
+					'raw':x.renderShort(request), 
+					'score':1, 
+					'time':x.attr('change_dt'), 
+					'url':'%s/manage_main'%x.absolute_url(), 
 					} for x in here.getTreeNodes(request,request.get('search_meta_types'))])">
 			</tal:block>
 			<tal:block tal:define="global obs python:[x['ob'] for x in qres]">
