@@ -150,7 +150,7 @@ def manage_repository_gitpush(self, request=None):
 	if btn=='BTN_GITPUSH':
 		message = []
 		if len([x for x in request['AUTHENTICATED_USER'].getRolesInContext(self) if x in ['Manager','ZMSAdminstrator']]) > 0:
-			userid = str(request.get('AUTHENTICATED_USER'))[0:3]
+			userid = str(request.get('AUTHENTICATED_USER'))
 			os.chdir(base_path)
 			command1 = 'git add .'
 			command2 = 'git commit -a -S -m "%s (%s)"'%(request.get('message').replace('"','').replace(';',''), userid)
