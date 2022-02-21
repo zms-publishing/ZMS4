@@ -1,15 +1,16 @@
 <!-- ZMSObject/input_fields -->
 
-	<tal:block tal:define="
-			standard modules/Products.zms/standard;
-			action options/action;
-			meta_id options/meta_id;
-			dummy0 python:request.set('ZMS_HIDE_ELEMENTS',[]);
-			metaObj python:here.getMetaobj(meta_id);
-			metaObjIds python:here.getMetaobjIds();
-			metaObjAttrIds python:here.getMetaobjAttrIds(metaObj['id']);
-			objAttrs python:here.getObjAttrs(metaObj['id'])">
-	<div class="card">
+<tal:block tal:define="
+		standard modules/Products.zms/standard;
+		action options/action;
+		meta_id options/meta_id;
+		dummy0 python:request.set('ZMS_HIDE_ELEMENTS',[]);
+		metaObj python:here.getMetaobj(meta_id);
+		metaObjIds python:here.getMetaobjIds();
+		metaObjAttrIds python:here.getMetaobjAttrIds(metaObj['id']);
+		objAttrs python:here.getObjAttrs(metaObj['id'])">
+	<div class="card" 
+		tal:attributes="class python:'card input_fields_%s'%(meta_id)">
 		<div class="card-header attr_last_modified clearfix btn-collapse">
 				<div class="btn-group">
 					<a id="zmi-toggle-activity-btn" class="btn card-toggle" data-toggle="collapse" href="#attrActivity"
@@ -205,7 +206,8 @@
 
 	</div><!-- .card -->
 
-	<div class="card zmi-container" tal:condition="python:action.lower()!='insert'">
+	<div class="card zmi-container" tal:condition="python:action.lower()!='insert'"
+		tal:attributes="class python:'card zmi-container input_fields_%s'%(meta_id)">
 		<tal:block tal:repeat="metaObjAttrId metaObjAttrIds"
 			><tal:block tal:define="global 
 					metaObjAttr python:here.getMetaobjAttr(metaObj['id'],metaObjAttrId);
@@ -214,8 +216,8 @@
 				><tal:block tal:condition="python:not metaObjAttr['id'].startswith('_') and not (metaObjAttr['id']=='e' and metaObjAttr['type']=='*') and not (metaObjAttr['id'] in request.get('ZMS_HIDE_ELEMENTS',[]))"
 					><tal:block tal:condition="python:(metaObjAttr['type']=='*' or (metaObjAttr['type'] in metaObjIds and not here.getMetaobj(metaObjAttr['type'])['type']=='ZMSResource')) and not request.get('ZMS_INSERT')"
 						><tal:block tal:define="global
-									objChildren python:here.getObjChildren(metaObjAttr['id'],request);
-									hasChildren python:len(objChildren)>0">
+								objChildren python:here.getObjChildren(metaObjAttr['id'],request);
+								hasChildren python:len(objChildren)>0">
 							<ul class="zmi-container" tal:condition="not:hasChildren">
 								<li class="zmi-item form-group row" tal:attributes="id python:'zmi_item_%s'%metaObjAttr['id']">
 									<label class="col-sm-2 control-label" tal:content="elLabel">the label</label>
@@ -276,6 +278,6 @@
 		</tal:block>
 	</div><!-- .card -->
 
-	</tal:block>
+</tal:block>
 
 <!-- /ZMSObject/input_fields -->
