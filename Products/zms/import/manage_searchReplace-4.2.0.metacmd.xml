@@ -216,7 +216,7 @@ return '\n'.join(list(html))
       </item>
       <item key="description"></item>
       <item key="execution" type="int">False</item>
-      <item key="icon_clazz"><![CDATA[fas fa-random]]></item>
+      <item key="icon_clazz"><![CDATA[fas fa-search]]></item>
       <item key="id">manage_searchReplace</item>
       <item key="meta_type"><![CDATA[Script (Python)]]></item>
       <item key="meta_types" type="list">
