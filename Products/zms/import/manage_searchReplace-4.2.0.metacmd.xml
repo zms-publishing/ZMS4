@@ -23,6 +23,9 @@ new = request.form.get('new','')
 did_replace = str(request.form.get('replace',0))=='1'
 
 def replace(o, old, new):
+	# ZOPE4: 
+	# if isinstance(o,(str,bytes))
+	# ZOPE2:
 	if isinstance(o,str):
 		return o.replace(old,new)
 	elif standard.operator_gettype(o) is standard.operator_gettype({}):
@@ -94,7 +97,6 @@ html.append('<body class="%s">'%(' '.join(['zmi',request['lang'],'search_replace
 html.append(context.zmi_body_header(context,request,options=[{'action':'#','label':'Search+Replace...'}]))
 html.append('<div id="zmi-tab">')
 html.append(context.zmi_breadcrumbs(context,request))
-
 html.append('<form class="form-horizontal card" method="post" enctype="multipart/form-data">')
 html.append('<input type="hidden" name="form_id" value="manage_searchReplace"/>')
 html.append('<input type="hidden" name="lang" value="%s"/>'%request['lang'])
@@ -127,7 +129,7 @@ html.append('''
 			<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CANCEL">%s</button>
 		</div><!-- .controls.save -->
 	</div>
-'''%( old, did_replace and 'checked="checked"' or '', new, btn_text_exec, btn_text_cncl ))
+'''%( standard.pystr(old), did_replace and 'checked="checked"' or '', standard.pystr(new), btn_text_exec, btn_text_cncl ))
 
 # --- Execute.
 # ---------------------------------
@@ -135,13 +137,17 @@ if request.form.get('btn')=='BTN_EXECUTE':
 	message = []
 	res = run(context,old,new)
 	if did_replace:
-		message.append('<p>%s Results found for <em>%s</em> and changed to <i>%s</i>.</p>'%(len(res),old,new))
+		message.append('<p>%s Results found for <em>%s</em> and changed to <i>%s</i>.</p>'%(len(res),standard.pystr(old),standard.pystr(new)))
 	else:
-		message.append('<p>%s Results found for <em>%s</em> and NOT changed.</p>'%(len(res),old))
+		message.append('<p>%s Results found for <em>%s</em> and NOT changed.</p>'%(len(res),standard.pystr(old)))
 	message.append('<ol>')
-	message.extend(['<li title="Found Item"><a title="<b>%s.%s</b> %s" class="found_item" data-toggle="tooltip" data-html="true" data-placement="left" href="%s/manage_main" target="_blank">%s</a></li>'%(x['node'].meta_id, x['attr_name'], str(remove_tags(x['text'])).replace(old,'<em>%s</em><i>%s</i>'%(old,new)), x['node'].absolute_url(),x['node'].absolute_url()) for x in res])
+	for e in res:
+		node_url = e['node'].absolute_url()
+		node_meta = e['node'].meta_id
+		node_attr = e['attr_name']
+		node_text = standard.pystr(remove_tags(standard.pystr(e['text']))).replace(standard.pystr(old),'<em>%s</em><i>%s</i>'%(standard.pystr(old),standard.pystr(new)))
+		message.append('<li title="Found Item"><a title="<b>%s.%s</b> %s" class="found_item" data-toggle="tooltip" data-html="true" data-placement="left" href="%s/manage_main" target="_blank">%s</a></li>'%(node_meta, node_attr, node_text, node_url,node_url))
 	message.append('</ol>')
-
 	html.append('''
 		<div class="alert alert-success my-3 %s">
 			<a class="close" style="font-size:1rem" data-dismiss="alert" href="#"><i class="fas fa-times"></i></a>
@@ -151,7 +157,6 @@ if request.form.get('btn')=='BTN_EXECUTE':
 
 elif request.form.get('btn')=='BTN_CANCEL':
 	request.response.redirect(context.url_append_params('manage_main',{'lang':request['lang']}))
-
 
 html.append('</div><!-- .card-body -->')
 html.append('</form><!-- .form-horizontal -->')
