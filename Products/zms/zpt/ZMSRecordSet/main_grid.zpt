@@ -1,4 +1,4 @@
-<!-- ZMSRecordSet/main_grid -->
+<!-- ZMSRecordSet/main_grid ZMS5 backport: string field latin1 fallback (L206) -->
 
 <div class="ZMSRecordSet main_grid" tal:define="standard modules/Products.zms/standard;
 	form_action python:options.get('form_action','manage_changeRecordSet');
@@ -20,16 +20,16 @@
 	pageEnd python:min(pageStart+pageSize,size);
 	offset python:options.get('offset',pageStart);">
 
-<form method="get" tal:attributes="action form_action">
 <div class="d-flex justify-content-between pagination-pre">
 	<div class="pull-left" tal:content="structure python:here.zmi_pagination(size=size,pageSize=pageSize,pageIndex=pageIndex)">
 		zmi_pagination
 	</div>
-	<div class="pull-right btn-group form-group mb-0">
-		<label class="control-label pt-2" for="qsize" style="min-width:4em" tal:content="python:here.getZMILangStr('ATTR_ROWS')" tal:define="global dummy0 python:request.set('qsize',request.get('qsize',10))">Rows</label>
-		<input class="form-control form-control-sm" size="2" id="qsize" type="text" name="qsize:int" tal:attributes="value request/qsize" onchange="this.form.submit()"/>
-	</div>
+	<form class="pull-right btn-group form-group mb-0">
+		<label class="control-label pt-2 pr-3" for="qsize" style="min-width:4em" tal:content="python:here.getZMILangStr('ATTR_ROWS')" tal:define="global dummy0 python:request.set('qsize',request.get('qsize',10))">Rows</label>
+		<input class="form-control form-control-sm" size="6" id="qsize" type="number" name="qsize:int" tal:attributes="value request/qsize" onchange="this.form.submit()"/>
+	</form>
 </div>
+<form method="get" tal:attributes="action form_action">
 <input type="hidden" name="lang" tal:condition="python:'lang' in request" tal:attributes="value request/lang" />
 <input type="hidden" name="preview" tal:condition="python:'preview' in request" tal:attributes="value request/preview" />
 <input type="hidden" name="action" value="" />
@@ -40,16 +40,12 @@
 	><input type="hidden" tal:attributes="name name; value python:url_params[name]" />
 </tal:block>
 
-<table class="table table-sm table-striped table-bordered table-hover zmi-sortable zmi-selectable">
+<div class="table-responsive mb-2">
+<table class="table table-sm table-striped table-bordered table-hover zmi-sortable zmi-selectable mb-0"
+	tal:attributes="data-cols python:len(metaObjAttrs) ">
 	<colgroup>
-		<col />
-		<tal:block tal:repeat="metaObjAttr metaObjAttrs">
-			<tal:block tal:define="global 
-				elType python:metaObjAttr.get('type','string')">
-				<col tal:condition="python:elType in ['int']" style="width:3em;"/>
-				<col tal:condition="python:elType not in ['int']"/>
-			</tal:block>
-		</tal:block>
+		<col class="zmi-datatype-action" />
+		<col tal:repeat="metaObjAttr metaObjAttrs" tal:attributes="class python:'zmi-datatype-%s'%(metaObjAttr.get('type','string'))" />
 	</colgroup>
 	<thead>
 		<tr>
@@ -73,22 +69,25 @@
 								<i class="fas fa-plus"></i>
 								<tal:block tal:content="python:here.getZMILangStr('BTN_INSERT')">Insert</tal:block>
 							</a>
-							<a tal:condition="python:'delete' in actions"
-								class="dropdown-item" href="javascript:;" tal:attributes="onclick python:options.get('delete','return zmiRecordSetDeleteRow(this)')">
-								<i class="fas fa-times"></i>
-								<tal:block tal:content="python:here.getZMILangStr('BTN_DELETE')">Delete</tal:block>
-							</a>
-							<a tal:condition="python:'duplicate' in actions"
-								class="dropdown-item" href="javascript:;" tal:attributes="onclick python:options.get('duplicate','return zmiRecordSetDuplicateRow(this)')">
-								<i class="far fa-copy"></i>
-								<tal:block tal:content="python:here.getZMILangStr('BTN_DUPLICATE')">Duplicate</tal:block>
-							</a>
+							<tal:block tal:repeat="action python:['delete','cut','copy','paste','duplicate']"
+								><a tal:condition="python:action in actions"
+									class="dropdown-item" href="javascript:;" tal:attributes="onclick python:options.get(action,'return zmiRecordSet%sRow(this)'%action.capitalize())">
+									<i tal:attributes="class python:'fas fa-%s'%{'delete':'times','duplicate':'clone'}.get(action,action)"></i>
+									<tal:block tal:content="python:here.getZMILangStr('BTN_%s'%action.upper())">Action</tal:block
+								></a>
+							</tal:block>
 						</div>
 					</tal:block>
 				</div>
 			</th>
 			<tal:block tal:repeat="i python:range(len(metaObjAttrs))"
-				><th tal:define="filterIndex python:i+10; metaObjAttr python:metaObjAttrs[i]; elLabel python:metaObjAttr['name']" class="nowrap">
+				><th class="nowrap" 
+					tal:define="
+						filterIndex python:i+10; 
+						metaObjAttr python:metaObjAttrs[i]; 
+						elLabel python:metaObjAttr['name'];
+						elType python:metaObjAttr.get('type','string')"
+					tal:attributes="class python:'nowrap zmi-datatype-%s'%(elType)">
 					<a tal:condition="python:not sorted and metaObjAttr['id']!=request.get('qorder','')" tal:content="structure python:'<i class=\042fas fa-sort\042></i>'" tal:attributes="title python:'%s %s'%(here.getZMILangStr('ATTR_ORDERBY'),elLabel);href python:here.url_append_params(url,{'qorder':metaObjAttr['id'],'qorderdir':'asc'},sep='&')">the label</a>
 					<a tal:condition="python:not sorted and metaObjAttr['id']==request.get('qorder','') and 'asc'==request.get('qorderdir','')" tal:content="structure python:'<i class=\042fas fa-sort-amount-up\042></i>'" tal:attributes="title python:'%s %s'%(here.getZMILangStr('ATTR_ORDERBY'),elLabel);href python:here.url_append_params(url,{'qorder':metaObjAttr['id'],'qorderdir':'desc'},sep='&')">the label</a>
 					<a tal:condition="python:not sorted and metaObjAttr['id']==request.get('qorder','') and 'desc'==request.get('qorderdir','')" tal:content="structure python:'<i class=\042fas fa-sort-amount-down\042></i>'" tal:attributes="title python:'%s %s'%(here.getZMILangStr('ATTR_ORDERBY'),elLabel);href python:here.url_append_params(url,{'qorder':metaObjAttr['id'],'qorderdir':'asc'},sep='&')">the label</a>
@@ -108,21 +107,24 @@
 				index python:offset+rindex;
 				record python:filtered_records[index];
 				qindex python:records.index(record);
-				name python:['qindices:list','qindex'][int('select' in actions)]"
-				><tal:block tal:condition="python:'record_handler' in options"
+				name python:['qindices:list','qindex'][int('select' in actions)]">
+
+				<tal:block tal:condition="python:'record_handler' in options"
 					><tal:block tal:define="global record python:options['record_handler'].handle_record(record)"></tal:block
 				></tal:block>
-			<tr tal:define="value python:record.get('__id__',qindex)" 
+
+				<tr tal:define="value python:record.get('__id__',qindex)" 
 				tal:attributes="id python:'tr_%i'%qindex; 
 				class python:['','zmi-selected'][int(str(value)==str(request.get('qindex')) or str(value) in [str(x) for x in request.get('qindices',[])])]">
-				<td tal:define="global title python:'';
-					record_params python:record.get('params',{});
-					params python:dict(url_params,**record_params)">
+				<td class="zmi-datatype-action"
+						tal:define="global title python:'';
+						record_params python:record.get('params',{});
+						params python:dict(url_params,**record_params)">
 					<tal:block tal:condition="python:'_change_uid' in record">
 						<tal:block tal:define="global title python:here.getLangFmtDate(record.get('_change_dt'))+' '+here.getZMILangStr('BY')+' '+str(record.get('_change_uid'))"></tal:block>
 					</tal:block>
 					<div class="btn-group" tal:attributes="title title">
-						<span class="checkbox btn btn-secondary">
+						<span class="checkbox btn btn-secondary text-nowrap">
 							<input tal:attributes="name name; type python:['checkbox','radio'][int('select' in actions)]; class python:['','radio-inline'][int('select' in actions)]; value value" />
 							<span class="index"><tal:block tal:content="python:pageStart+rindex+1">index</tal:block>.</span>
 						</span>
@@ -139,11 +141,13 @@
 									<i class="fas fa-pencil-alt"></i>
 									<tal:block tal:content="python:here.getZMILangStr('BTN_EDIT')">Edit</tal:block>
 								</a>
-								<a tal:condition="python:'delete' in actions"
-									class="dropdown-item" href="javascript:;" tal:attributes="onclick python:options.get('delete','javascript:return zmiRecordSetDeleteRow(this,%i)'%qindex)">
-									<i class="fas fa-times"></i>
-									<tal:block tal:content="python:here.getZMILangStr('BTN_DELETE')">Delete</tal:block>
-								</a>
+								<tal:block tal:repeat="action python:['delete','cut','copy','paste','duplicate']">
+									<a tal:condition="python:action in actions"
+										class="dropdown-item" href="javascript:;" tal:attributes="onclick python:options.get(action,'return zmiRecordSet%sRow(this,%i)'%(action.capitalize(),qindex))">
+										<i tal:attributes="class python:'fas fa-%s'%{'delete':'times','duplicate':'clone'}.get(action,action)"></i>
+										<tal:block tal:content="python:here.getZMILangStr('BTN_%s'%action.upper())">Action</tal:block>
+									</a>
+								</tal:block>
 								<tal:block tal:condition="sorted">
 									<a class="dropdown-item" href="javascript:;" tal:attributes="onclick python:options.get('sort','javascript:return zmiRecordSetMoveRow(this,%i,-1)'%index)"><i class="fas fa-arrow-up"></i> <tal:block tal:content="python:here.getZMILangStr('ACTION_MOVEUP')">Move up</tal:block></a>
 									<a class="dropdown-item" href="javascript:;" tal:attributes="onclick python:options.get('sort','javascript:return zmiRecordSetMoveRow(this,%i,1)'%index)"><i class="fas fa-arrow-down"></i> <tal:block tal:content="python:here.getZMILangStr('ACTION_MOVEDOWN')">Move down</tal:block></a>
@@ -156,52 +160,54 @@
 					><tal:block tal:define="elName python:metaObjAttr['id'];
 							elValue python:here.operator_getitem(record,elName,metaObjAttr.get('default'),ignorecase=True);
 							elType python:metaObjAttr.get('type','string')"
-					><td class="data" tal:attributes="class python:'data data-%s'%(elName)"><div tal:attributes="class elType"
-						><tal:block tal:condition="python:elType=='url'" tal:define="global target python:here.getLinkObj(elValue)"
-							><tal:block tal:condition="python:target is not None"
-								><tal:block tal:content="structure python:target.zmi_breadcrumbs()">zmi_breadcrumbs</tal:block
-							></tal:block
-							><tal:block tal:condition="not:python:target is not None"
-								><tal:block tal:content="python:standard.string_maxlen(str(elValue),50)">elValue</tal:block
-							></tal:block
-						></tal:block
-						><tal:block tal:condition="python:elType in ['html']"
-							><tal:block tal:content="structure elValue">the value</tal:block
-						></tal:block
-						><tal:block tal:condition="python:elType in ['object']"
-							><a tal:attributes="href python:'%s/manage_main'%elValue.absolute_url()" target="_blank">
-								<img tal:attributes="src python:elValue.icon"/>
-								<tal:block tal:content="python:elValue.title_or_id()">the title or id</tal:block>
-							</a>
-						</tal:block
-						><tal:block tal:condition="python:elType in ['boolean']"
-							><center><i tal:condition="python:elValue" class="icon-ok"></i></center>
-						</tal:block
-						><tal:block tal:condition="python:elType in ['image']"
-							><tal:block tal:condition="python:elValue is not None and here.operator_gettype(elValue) is not str"
-								><a tal:attributes="href python:elValue.getHref(request)" class="thumbnail" target="_blank"><img tal:attributes="src python:elValue.getHref(request)"/></a>
-							</tal:block
-							><tal:block tal:condition="python:elValue is not None and here.operator_gettype(elValue) is str">
-								<img src="data:image/png;base64," tal:attributes="data-previewbase64 elValue" width="32" height="32" />
-							</tal:block
-						></tal:block
-						><tal:block tal:condition="python:elType in ['file'] and elValue is not None"
-							><i class="icon-download"></i> <tal:block 
-								tal:on-error="string:<!-- FILENAME-ERROR -->" 
-								tal:content="structure python:(here.operator_gettype(elValue) is not str) and elValue.getFilename() or elValue">filename</tal:block
-						></tal:block
-						><tal:block tal:condition="python:elType in ['date','datetime']"
-							><tal:block tal:content="python:here.getLangFmtDate(elValue,request['manage_lang'],('%s_fmt'%elType).upper())">elValue</tal:block
-						></tal:block
-						><tal:block tal:condition="python:elType in ['float','int']"
-							><tal:block tal:content="elValue">elValue</tal:block
-						></tal:block
-						><tal:block tal:condition="not:python:elType in ['boolean','date','datetime','float','html','image','file','int','object','url','None']"
-							><tal:block tal:condition="python:elValue is not None"
-								tal:on-error="elValue" 
-								tal:content="structure elValue">elValue</tal:block
-						></tal:block
-					></div></td>
+						><td class="data" tal:attributes="class python:'data data-%s zmi-datatype-%s'%(elName, metaObjAttr.get('fk') and 'fk'or elType)"
+							><div tal:attributes="class elType" 
+								><tal:block tal:condition="python:elType=='url'" 
+									tal:define="target python:here.getLinkObj(elValue)"
+									><tal:block tal:condition="python:target is not None"
+										><tal:block tal:content="structure python:target.zmi_breadcrumbs()">zmi_breadcrumbs</tal:block
+									></tal:block
+									><tal:block tal:condition="not:python:target is not None"
+										><tal:block tal:content="python:standard.string_maxlen(str(elValue),50)">elValue</tal:block
+									></tal:block
+								></tal:block
+								><tal:block tal:condition="python:elType in ['html']"
+									><tal:block tal:content="structure elValue">the value</tal:block
+								></tal:block
+								><tal:block tal:condition="python:elType in ['object']"
+									><a tal:attributes="href python:'%s/manage_main'%elValue.absolute_url()" target="_blank">
+										<img tal:attributes="src python:elValue.icon"/>
+										<tal:block tal:content="python:elValue.title_or_id()">the title or id</tal:block
+									></a>
+								</tal:block
+								><tal:block tal:condition="python:elType in ['boolean']"
+									><i class="fas fa-check-square" tal:attributes="class python:'far fa-%ssquare'%(elValue and 'check-' or '')"></i>
+								</tal:block
+								><tal:block tal:condition="python:elType in ['image']"
+									><tal:block tal:condition="python:elValue is not None and here.operator_gettype(elValue) is not str"
+										><a tal:attributes="href python:elValue.getHref(request)" class="thumbnail" target="_blank"><img tal:attributes="src python:elValue.getHref(request)"/></a>
+									</tal:block
+									><tal:block tal:condition="python:elValue is not None and here.operator_gettype(elValue) is str">
+										<img src="data:image/png;base64," tal:attributes="data-previewbase64 elValue" width="32" height="32" />
+									</tal:block
+								></tal:block
+								><tal:block tal:condition="python:elType in ['file'] and elValue is not None"
+									><i class="fas fa-download"></i> <tal:block 
+										tal:on-error="string:<!-- FILENAME-ERROR -->" 
+										tal:content="structure python:(here.operator_gettype(elValue) is not str) and elValue.getFilename() or elValue">filename</tal:block
+								></tal:block
+								><tal:block tal:condition="python:elType in ['date','datetime','time']"
+									><tal:block tal:content="python:here.getLangFmtDate(elValue,request['manage_lang'],('%s_fmt'%elType).upper())">elValue</tal:block
+								></tal:block
+								><tal:block tal:condition="python:elType in ['float','int']"
+									><tal:block tal:content="elValue">elValue</tal:block
+								></tal:block
+								><tal:block tal:condition="not:python:elValue is not None and elType in ['boolean','date','datetime','time','float','html','image','file','int','object','url','None']"
+									tal:on-error="python: standard.is_str(elValue) and standard.pystr( elValue,'utf-8','replace') or standard.pystr( elValue,'latin-1','replace')" 
+									tal:content="structure elValue">elValue
+								></tal:block
+							></div>
+						</td>
 					</tal:block>
 				</tal:block>
 			</tr>
@@ -209,27 +215,28 @@
 	</tal:block>
 </tbody>
 </table>
+</div>
+</form>
 <div class="pagination-post clearfix"
 	tal:define="pagination python:here.zmi_pagination(size=size,pageSize=pageSize,pageIndex=pageIndex)"
 	tal:condition="python:request.get('has_pagination',True)">
 	<div class="pull-left" tal:content="structure pagination">zmi_pagination</div>
 </div>
-</form>
 
 </div>
 
 <script>
-  $(function() {
-    $("img[src='data:image/png;base64,']").each(function() {
-      var src = $(this).attr("src");
-      var dat = $(this).data("previewbase64");
-      if (dat) {
-        $(this).attr('src',src+dat); 
-      } else {
-        $(this).remove();
-      }
-    });
-  });
+	$(function() {
+		$("img[src='data:image/png;base64,']").each(function() {
+			var src = $(this).attr("src");
+			var dat = $(this).data("previewbase64");
+			if (dat) {
+				$(this).attr('src',src+dat); 
+			} else {
+				$(this).remove();
+			}
+		});
+	});
 </script>
 
 <!-- /ZMSRecordSet/main_grid -->
