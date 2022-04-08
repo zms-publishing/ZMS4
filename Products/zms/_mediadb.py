@@ -270,7 +270,7 @@ class MediaDb(
       zmi_icon = "fas fa-images"
       icon_clazz = zmi_icon
     else: # py2
-      zmi_icon = "icon-folder-close"
+      zmi_icon = "icon-folder-close fas fa-images"
       icon_clazz = zmi_icon
 
     # Management Options.
