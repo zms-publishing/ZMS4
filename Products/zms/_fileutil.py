@@ -327,8 +327,11 @@ def exportObj(obj, filename, filetype='b'):
         try:
           data = obj.read() # REQUEST.enctype multipart/form-data
         except:
-          data = str(obj)
-    
+          try:
+            data = str(obj)
+          except:
+            data = obj.encode('utf-8')
+
   #-- Save to file.
   if data is not None:
     objfile = open(filename, 'w%s'%filetype)
