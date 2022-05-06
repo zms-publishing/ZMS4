@@ -25,7 +25,7 @@
 						<tal:block tal:content="structure python:here.zmi_version_object_state(here,request)">zmi_version_object_state</tal:block>
 					</div>
 			</div>
-			<div class="zmi-action btn-group pull-right dropleft" tal:condition="not:python: request.get('ZMS_INSERT',False)">
+			<div class="zmi-action loaded btn-group pull-right dropleft" tal:condition="not:python: request.get('ZMS_INSERT',False)">
 				<tal:block tal:define="
 						metaCmds python:[x for x in here.getMetaCmds(here,'') if x['stereotype'] == ''];
 						actions python:[[],[(here.getZMILangStr('BTN_UNDO'),'../manage_undoObjs?ids:list=%s'%here.id,'icon-undo')]][here.inObjStates(['STATE_NEW','STATE_MODIFIED','STATE_DELETED'],request)] + [[x['name'],'manage_executeMetacmd?id=%s'%x['id'],x.get('icon_clazz'),x.get('title')] for x in metaCmds] + here.filtered_workflow_actions()"
@@ -39,8 +39,8 @@
 								</div>
 								<tal:block tal:condition="not:python:action[0].startswith('-----') and action[0].endswith('-----')">
 									<a class="dropdown-item" tal:attributes="href python:'javascript:$ZMI.actionList.exec($(\'.attr_last_modified\'),\'%s\',\'%s\')'%(action[0],action[1])">
-										<tal:block tal:condition="python:len(action)>=3 and action[2] is not None"><i tal:attributes="class python:action[2]"></i></tal:block>
-										<tal:block tal:content="structure python:action[0]">the title</tal:block>
+										<i tal:condition="python:len(action)>=3 and action[2] is not None" tal:attributes="class python:action[2]"></i>
+										<span tal:content="structure python:action[0]">the title</span>
 									</a>
 								</tal:block>
 							</tal:block>
@@ -71,12 +71,14 @@
 							tal:attributes="
 								onclick python:'$ZMI.CopyToClipboard(\'{$%s}\')'%(here.get_uid());
 								class python:' '.join(['get_uid']+[['text-danger'],[]][cataloged]);">
+							<tal:block tal:content="python:'ID:%s'%(here.get_uid())">unique-id</tal:block>
 							<tal:block tal:condition="not:cataloged">
-								<tal:block tal:define="dummy0 python:standard.triggerEvent(here,'*.ObjectAdded')">
-									<i class="text-danger fas fa-ambulance"></i>
+								<tal:block tal:condition="python:request.get('refresh_catalog')">
+									<tal:block tal:define="dummy0 python:standard.triggerEvent(here,'*.ObjectMoved')"></tal:block>
 								</tal:block>
+								<a href="javascript:;" onclick="if(confirm('Refresh catalog?')){self.location.href='?refresh_catalog=True'}return false;" class="btn btn-danger"><i title="Refresh catalog" class="fas fa-ambulance"></i></a>
 							</tal:block>
-							<tal:block tal:content="python:'ID:%s'%(here.get_uid())">unique-id</tal:block></span>
+						</span>
 					</span>
 					</div><!-- .col-sm-8 -->
 				</div><!-- .form-group -->
@@ -175,7 +177,7 @@
 			tal:condition="constraints">
 			<tal:block tal:on-error="nothing" tal:repeat="category python:list(constraints)">
 				<div tal:attributes="class python:'constraint constraint-%s'%category[:-1].lower()">
-					<i class="fas fa-warning-sign" tal:attributes="title python:category[:-1] + ' ' + category[:-1] + ';; '.join([ x[1] for x in constraints[category] ] )"></i>
+					<i class="fas fa-exclamation-triangle" tal:attributes="title python:category[:-1] + ' ' + ' | '.join([ x[1] for x in constraints[category] ] )"></i>
 				</div>
 			</tal:block>
 		</tal:block>
@@ -191,7 +193,7 @@
 					<div class="controls save">
 						<div class="form-check form-check-inline align-middle" 
 							title="Menu Lock: Stay in the menu after clicking the save button.">
-							<input type="checkbox" name="menulock:int" value="1" /><i class="fas fa-lock pl-2"></i>
+							<input type="checkbox" id="menulock" name="menulock:int" onclick="$ZMILocalStorageAPI.set('ZMS.menulock',this.checked)" value="1" /><i class="fas fa-lock pl-2"></i>
 						</div>
 						<button type="submit" name="btn" class="btn btn-primary" tal:attributes="value python:'BTN_%s'%action.upper()" tal:content="python:here.getZMILangStr('BTN_%s'%action.upper())">Action</button>
 						<button type="submit" name="btn" class="btn btn-secondary" value="BTN_CANCEL" tal:content="python:here.getZMILangStr('BTN_CANCEL')">Cancel</button>
@@ -202,42 +204,41 @@
 
 	</div><!-- .card -->
 
-	<div class="card zmi-container" tal:condition="python:action.lower()!='insert'"
-		tal:attributes="class python:'card zmi-container input_fields_%s'%(meta_id)">
-		<tal:block tal:repeat="metaObjAttrId metaObjAttrIds"
+	<div class="card zmi-form-container zmi-container"
+		tal:condition="python:action.lower()!='insert'"
+		tal:attributes="class python:'card zmi-form-container zmi-container input_fields_%s'%(meta_id)">
+		<tal:block tal:repeat="metaObjAttr python:[x for x in [here.getMetaobjAttr(metaObj['id'],x) for x in metaObjAttrIds] if x]"
 			><tal:block tal:define="global 
-					metaObjAttr python:here.getMetaobjAttr(metaObj['id'],metaObjAttrId);
 					elName python:here.getObjAttrName(metaObjAttr,request['lang']);
 					elLabel python:here.getObjAttrLabel(metaObjAttr)"
 				><tal:block tal:condition="python:not metaObjAttr['id'].startswith('_') and not (metaObjAttr['id']=='e' and metaObjAttr['type']=='*') and not (metaObjAttr['id'] in request.get('ZMS_HIDE_ELEMENTS',[]))"
 					><tal:block tal:condition="python:(metaObjAttr['type']=='*' or (metaObjAttr['type'] in metaObjIds and not here.getMetaobj(metaObjAttr['type'])['type']=='ZMSResource')) and not request.get('ZMS_INSERT')"
 						><tal:block tal:define="global
-								objChildren python:here.getObjChildren(metaObjAttr['id'],request);
-								hasChildren python:len(objChildren)>0">
-							<ul class="zmi-container" tal:condition="not:hasChildren">
-								<li class="zmi-item form-group row" tal:attributes="id python:'zmi_item_%s'%metaObjAttr['id']">
-									<label class="col-sm-2 control-label" tal:content="elLabel">the label</label>
-									<div class="col-sm-10">
-										<div class="zmi-action btn-group dropleft">
-											<span class="d-none zmi-sort-id" tal:content="python:9990">the sort-id</span>
-											<button class="btn btn-secondary split-left"></button>
-											<button class="btn btn-secondary split-right dropdown-toggle" data-toggle="dropdown"><i class="fas fa-plus-square"></i></button>
-										</div><!-- .btn-group -->
-									</div><!-- .col-sm-10 -->
-								</li><!-- .zmi-item -->
-							</ul>
-							<tal:block tal:condition="hasChildren">
-								<div class="card-header btn-collapse">
-									<a class="btn card-toggle pull-left" data-toggle="collapse" tal:attributes="href python:'#%s'%metaObjAttr['id'];data-toggle python:['','collapse'][hasChildren]">
-										<i tal:attributes="class python:'fas fa-%s'%(['caret-down',''][hasChildren])"></i>
-										<tal:block tal:content="elLabel">the label</tal:block>
-									</a>
-									<div class="btn zmi-changes" tal:content="structure python:'&nbsp;&nbsp;(%i %s)'%(len(objChildren),here.getZMILangStr('ATTR_OBJECTS'))">%i Objects</div>
-								</div><!-- .card-header -->
-								<tal:block tal:content="structure python:'<div id=\042%s\042 class=\042%s\042>'%(metaObjAttr['id'],' '.join(['collapse','zmi-children']+[[''],['show']][hasChildren])) +'<div class=\042card-body\042>'"></tal:block>
-								<ul class="zmi-container zmi-sortable">
+									objChildren python:here.getObjChildren(metaObjAttr['id'],request);
+									hasChildren python:len(objChildren)>0">
+
+							<div class="card-header btn-collapse">
+								<a class="btn card-toggle pull-left" data-toggle="collapse" tal:attributes="href python:'#%s'%metaObjAttr['id'];data-toggle python:['','collapse'][hasChildren]">
+									<i tal:attributes="class python:'fas fa-%s'%(['caret-down',''][hasChildren])"></i>
+									<tal:block tal:content="elLabel">the label</tal:block>
+								</a>
+								<div class="btn zmi-changes" tal:content="structure python:'(%i %s)'%(len(objChildren),here.getZMILangStr('ATTR_OBJECTS'))">%i Objects</div>
+							</div><!-- .card-header -->
+							<div class="collapse zmi-children" tal:attributes="id python:metaObjAttr['id']">
+								<div class="card-body">
+									<ul class="zmi-container zmi-sortable zmi-children">
+										<li class="zmi-item" tal:condition="not:hasChildren" tal:attributes="id python:'zmi_item_%s'%metaObjAttr['id']">
+											<div class="center">&nbsp;</div>
+											<div class="right">
+												<div class="zmi-action btn-group dropleft">
+													<span class="d-none zmi-sort-id" tal:content="python:9990">the sort-id</span>
+													<button class="btn btn-secondary split-left"></button>
+													<button class="btn btn-secondary split-right dropdown-toggle" data-toggle="dropdown"><i class="fas fa-plus-square"></i></button>
+												</div><!-- .btn-group -->
+											</div><!-- .right -->
+										</li><!-- .zmi-item -->
 									<tal:block tal:repeat="childNode objChildren">
-										<li tal:attributes="id python:'zmi_item_%s'%childNode.id; class python:' '.join([childNode.meta_id,'zmi-item','zmi-selectable']+[['pageelement'],[]][int(childNode.isPage())] + [[],['is-new']][int(childNode.inObjStates(['STATE_NEW'],request))] + [[],['is-modified']][int(childNode.inObjStates(['STATE_MODIFIED'],request))] + [[],['is-deleted']][int(childNode.inObjStates(['STATE_DELETED'],request))])">
+										<li tal:attributes="id python:'zmi_item_%s'%childNode.id; class python:' '.join([childNode.meta_id,'zmi-item','zmi-selectable']+[['pageelement'],['page']][int(childNode.isPage())] + [[],['is-new']][int(childNode.inObjStates(['STATE_NEW'],request))] + [[],['is-modified']][int(childNode.inObjStates(['STATE_MODIFIED'],request))] + [[],['is-deleted']][int(childNode.inObjStates(['STATE_DELETED'],request))])">
 											<div class="center"
 												tal:on-error="structure string: <code style='display:block'>ERROR: childNode.renderShort(request)</code>"  
 												tal:attributes="class python:'center%s'%([' inactive',''][childNode.isActive(request)])"
@@ -249,7 +250,7 @@
 													<span class="d-none zmi-sort-id" tal:content="python:childNode.getSortId()">the sort-id</span>
 													<button class="btn btn-secondary split-left">
 														<tal:block tal:content="structure python:childNode.display_icon(request)">the icon</tal:block>
-														<tal:block tal:content="python:childNode.display_type(request)">the child-node</tal:block>
+														<span tal:content="python:childNode.display_type(request)">the child-node</span>
 													</button>
 													<button class="btn btn-secondary split-right dropdown-toggle" data-toggle="dropdown">
 														<tal:block tal:content="structure python:childNode.display_icon(request)">the icon</tal:block>
@@ -264,9 +265,10 @@
 											</div><!-- .right -->
 										</li><!-- .zmi-item -->
 									</tal:block>
-								</ul><!-- .zmi-container.zmi-sortable -->
-								<tal:block tal:content="structure python:'' + '</div><!-- .card-body -->' + '</div><!-- .collapse -->' "></tal:block>
-							</tal:block>
+									</ul>
+								</div><!-- .card-body -->
+							</div><!-- .collapse -->
+
 						</tal:block>
 					</tal:block>
 				</tal:block>
