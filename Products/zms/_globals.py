@@ -22,6 +22,7 @@
 # Imports.
 from Products.PageTemplates.Expressions import SecureModuleImporter
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+import time
 import six
 import sys
 
@@ -123,6 +124,8 @@ umlaut_map = {
         u'Я': 'JA',}
 
 def sort_item( i):
+  if isinstance(i, time.struct_time):
+    i = time.strftime('%Y%m%d%H%M%S',i)
   if isinstance(i, bytes):
     i = i.decode('utf-8')
   if isinstance(i, str):
