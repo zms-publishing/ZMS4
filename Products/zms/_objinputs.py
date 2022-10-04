@@ -98,7 +98,7 @@ class ObjInputs(object):
   # ----------------------------------------------------------------------------
   def getTextInput(self, fmName, elName, size=None, value='', type='text', enabled=True, css='form-control', placeholder=''):
     # In case lang is set to None, use primary language
-    lang = self.REQUEST.get('lang', None) is not None and self.REQUEST.get('lang',None) or self.getPrimaryLanguage()
+    lang = self.REQUEST.get('lang') is not None and self.REQUEST.get('lang') or self.getPrimaryLanguage()
     elId = elName
     if elId.endswith('_%s'%lang):
       elId = elId[:-len('_%s'%lang)]
