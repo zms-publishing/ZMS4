@@ -91,10 +91,10 @@
 				href python:has_file and value.getHref(request) or 'None';
 				dimensions python:has_file and '%sx%spx'%(str(value.getWidth()),str(value.getHeight())) or 'None';
 				size python:has_file and here.getDataSizeStr(value.get_size()) or 'None';
-				title python:has_file and '%s (%s) %s'%(filename,dimensions,size) or 'No File Uploaded'">
-
+				title python:has_file and '%s (%s) %s'%(filename,dimensions,size) or 'No File Uploaded';
+				lang python:request.get('lang') is not None and request.get('lang') or context.getPrimaryLanguage()">
 			<div class="custom-file"
-					tal:condition="python:request['lang'] in here.getLanguages(request)"
+				tal:condition="python:lang in here.getLanguages(request)"
 					tal:attributes="class python:'custom-file%s'%(has_file and '' or ' new');
 						title title;
 						id python:'filename_%s'%elName;
