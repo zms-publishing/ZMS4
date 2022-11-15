@@ -21,6 +21,7 @@ from AccessControl.SecurityInfo import ModuleSecurityInfo
 from Products.ExternalMethod import ExternalMethod
 from Products.PageTemplates import ZopePageTemplate
 from Products.PythonScripts import PythonScript
+import OFS.Image
 import os
 import re
 # Product Imports.
@@ -301,7 +302,7 @@ def addPythonScript(container, id, title, data):
   ob.write( data)
   initPermissions(container, id)
 
-def addFolder(container, id, title, data):
+def addFolder(container, id, title):
   """
   Add Folder to container.
   """
@@ -345,10 +346,14 @@ def addFile(container, id, title, data, content_type=None):
   Add File to container.
   """
   if content_type is None:
-    if type(data) is str:
-      data = standard.pybytes(data,'utf-8')
     content_type, enc = standard.guess_content_type(id, data)
-  container.manage_addFile(id=id, title=title, file=data, content_type=content_type)
+    if type(data) is str or type(data) is unicode:
+      # data = standard.pybytes(data,'utf-8')
+      data = bytes(data.encode('utf-8'))
+  try:
+    OFS.Image.manage_addFile(container,id=id, title=title, file=data, content_type=content_type)
+  except:
+    pass
   ob = getattr( container, id)
   return ob
 
@@ -358,7 +363,7 @@ def addImage(container, id, title, data, content_type=None):
   """
   if content_type is None:
     content_type, enc = standard.guess_content_type(id, data)
-  container.manage_addImage(id=id, title=title, file=data, content_type=content_type)
+  OFS.Image.manage_addImage(container, id=id, title=title, file=data, content_type=content_type)
   ob = getattr( container, id)
   return ob
 
