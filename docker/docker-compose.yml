@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  zms4:
+    build: .
+    image: zms4:latest
+    ports:
+      - 8080:8080
+      - 5678:5678
+    environment:
+      - PYTHONUNBUFFERED="1"
+      - CONFIG_FILE="/home/zope/venv/instance/zms4/etc/zope.ini"
+      - INSTANCE_HOME="/home/zope/venv/instance/zms4"
+      - CLIENT_HOME="/home/zope/venv/instance/zms4"
+      - PYTHON="/home/zope/venv/bin/python"
+      - SOFTWARE_HOME="/home/zope/venv/bin"
+    volumes:
+      - ./var/:/home/zope/venv/instance/zms4/var/
+
+    # command: /home/zope/venv/instance/zms4/bin/runzope -X debug-mode=on

@@ -1,0 +1,30 @@
+FROM alpine:3.11
+RUN echo -e "http://nl.alpinelinux.org/alpine/v3.11/main\nhttp://nl.alpinelinux.org/alpine/v3.11/community" > /etc/apk/repositories
+
+EXPOSE 8080
+EXPOSE 5678
+
+# Install Zope/ZEO Dependencies
+RUN apk add python2 make gcc g++ git
+RUN apk add python2-dev mariadb-dev openldap-dev curl bash libffi
+RUN apk add -v py2-pip
+RUN pip2 install setuptools virtualenv
+
+# https://stackoverflow.com/questions/49955097/how-do-i-add-a-user-when-im-using-alpine-as-a-base-image 
+RUN addgroup -S zope && adduser --disabled-password -S zope -G zope
+USER zope
+WORKDIR /home/zope/
+ENV VIRTUAL_ENV=/home/zope/venv
+RUN virtualenv --python=python2  $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN cd $VIRTUAL_ENV/bin
+RUN pip install -r https://zopefoundation.github.io/Zope/releases/2.13.29/requirements.txt
+RUN pip install --no-deps -e git+https://github.com/zms-publishing/ZMS4.git#egg=ZMS
+
+# # Create Zope Instance
+RUN mkzopeinstance -d /home/zope/venv/instance/zms4 -u admin:admin
+
+# COPY ./var venv/instance/zms4/var
+
+# Finally Start Zope by Script
+ENTRYPOINT ["/home/zope/venv/instance/zms4/bin/runzope","-X","debug-mode=on"]
