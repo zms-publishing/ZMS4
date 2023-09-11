@@ -259,7 +259,10 @@ class AccessableObject(object):
     # --------------------------------------------------------------------------
     def hasAccess(self, REQUEST):
       auth_user = REQUEST.get('AUTHENTICATED_USER')
-      access = auth_user.has_permission( 'View', self) in [ 1, True]
+      try:
+        access = auth_user.has_permission( 'View', self) in [ 1, True]
+      except:
+        access = True
       if not access:
         access = access or self.hasPublicAccess() 
       return access

@@ -348,8 +348,10 @@ def addFile(container, id, title, data, content_type=None):
   if content_type is None:
     content_type, enc = standard.guess_content_type(id, data)
     if type(data) is str or type(data) is unicode:
-      # data = standard.pybytes(data,'utf-8')
-      data = bytes(data.encode('utf-8'))
+      try:
+        data = standard.pybytes(data,'utf-8')
+      except:
+        data = bytes(data.encode('utf-8'))
   try:
     OFS.Image.manage_addFile(container,id=id, title=title, file=data, content_type=content_type)
   except:
