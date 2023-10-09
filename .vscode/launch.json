@@ -5,20 +5,50 @@
             "name": "Python: ZMS4-Py2-Dev",
             "type": "python",
             "request": "launch",
-            // "program": "/home/zope/vpy27/lib/python2.7/site-packages/Zope2/Startup/run.py",
             "module": "Zope2.Startup.run",
+            "justMyCode": false,
             "console": "integratedTerminal",
             "args": [
                 "-C ../../etc/zope.conf",
-                // "-X 'debug-mode=on'",
+                "-X 'debug-mode=on'",
             ],
             "env": {
+                "PYTHONUNBUFFERED":"1",
                 "CONFIG_FILE": "/home/zope/instance/zms4_dev/etc/zope.conf",
                 "INSTANCE_HOME": "/home/zope/instance/zms4_dev",
+                "CLIENT_HOME": "/home/zope/instance/zms4_dev",
                 "PYTHON": "/home/zope/vpy27/bin/python",
-                "SOFTWARE_HOME": "/home/zope/vpy27/bin/",
-                "ZDCTL": "/home/zope/vpy27/bin/zopectl",
-                "ZOPE_RUN": "/home/zope/vpy27/bin/runzope",
+                "SOFTWARE_HOME": "/home/zope/vpy27/bin/"
+            },
+            "serverReadyAction":{
+                "pattern":"Serving on http://0.0.0.0:8080",
+                "uriFormat": "http://127.0.0.1:8080/manage_main",
+                "action": "openExternally",
+            },
+        },
+        {
+            "name": "Docker: ZMS4-Py2-Dev",
+            "type": "python",
+            "request": "launch",
+            "module": "Zope2.Startup.run",
+            "justMyCode": false,
+            "console": "integratedTerminal",
+            "args": [
+                "-C ../../etc/zope.conf",
+                "-X 'debug-mode=on'",
+            ],
+            "env": {
+                "PYTHONUNBUFFERED":"1",
+                "CONFIG_FILE": "/home/zope/venv/instance/zms4/etc/zope.conf",
+                "INSTANCE_HOME": "/home/zope/venv/instance/zms4",
+                "CLIENT_HOME": "/home/zope/venv/instance/zms4",
+                "PYTHON": "/home/zope/venv/bin/python",
+                "SOFTWARE_HOME": "/home/zope/venv/bin/"
+            },
+            "serverReadyAction":{
+                "pattern":"Serving on http://0.0.0.0:8080",
+                "uriFormat": "http://127.0.0.1:8080/manage_main",
+                "action": "openExternally",
             },
         }
     ]
