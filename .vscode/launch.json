@@ -9,8 +9,8 @@
             "justMyCode": false,
             "console": "integratedTerminal",
             "args": [
-                "-C ../../etc/zope.conf",
-                "-X 'debug-mode=on'",
+                "-C/home/zope/instance/zms4_dev/etc/zope.conf",
+                "-Xdebug-mode=on",
             ],
             "env": {
                 "PYTHONUNBUFFERED":"1",
@@ -21,7 +21,7 @@
                 "SOFTWARE_HOME": "/home/zope/vpy27/bin/"
             },
             "serverReadyAction":{
-                "pattern":"Serving on http://0.0.0.0:8080",
+                "pattern":"Zope Ready to handle requests",
                 "uriFormat": "http://127.0.0.1:8080/manage_main",
                 "action": "openExternally",
             },
@@ -34,8 +34,8 @@
             "justMyCode": false,
             "console": "integratedTerminal",
             "args": [
-                "-C ../../etc/zope.conf",
-                "-X 'debug-mode=on'",
+                "-C/home/zope/venv/instance/zms4/etc/zope.conf",
+                "-Xdebug-mode=on",
             ],
             "env": {
                 "PYTHONUNBUFFERED":"1",
@@ -46,7 +46,7 @@
                 "SOFTWARE_HOME": "/home/zope/venv/bin/"
             },
             "serverReadyAction":{
-                "pattern":"Serving on http://0.0.0.0:8080",
+                "pattern":"Zope Ready to handle requests",
                 "uriFormat": "http://127.0.0.1:8080/manage_main",
                 "action": "openExternally",
             },
