@@ -1,0 +1,44 @@
+{
+	"folders": [
+		{
+			"name": "Docker-ZMS4-src",
+			"path": "/home/zope/venv/src"
+		},
+		{
+			"name": "Docker-ZMS4-Instance",
+			"path": "/home/zope/venv/instance/zms4"
+		},
+		{
+			"name": "Docker-ZMS4-Site-Packages",
+			"path": "/home/zope/venv/lib/python2.7/site-packages"
+		},
+	],
+	"settings": {
+		"python.defaultInterpreterPath": "/home/zope/venv/bin/python",
+		"window.zoomLevel": 0,
+		"git.ignoreMissingGitWarning": true,
+		"editor.minimap.enabled": false,
+		"editor.renderWhitespace": "all",
+		"editor.renderControlCharacters": false,
+		"workbench.iconTheme": "vs-minimal",
+		"files.associations": {
+			"*.zpt": "html",
+			"*.zcml": "xml"
+		},
+		"scm.alwaysShowActions": true,
+		"files.exclude": {
+			"*.pyc": true,
+			"*-all.min.*":true,
+			"**/cache/**": true,
+			"**/Data.*": true,
+		},
+		"search.exclude": { 
+			"**/apidocs/**": true
+		},
+		"files.eol": "\n",
+		"files.autoSave": "afterDelay",
+		"workbench.colorTheme": "Visual Studio Light",
+		"python.linting.enabled": true
+	},
+	"remoteAuthority": "wsl+Ubuntu-20.04"
+}
