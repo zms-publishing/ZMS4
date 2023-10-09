@@ -20,17 +20,19 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN cd $VIRTUAL_ENV/bin
 RUN pip install -r https://zopefoundation.github.io/Zope/releases/2.13.29/requirements.txt
 RUN pip install --no-deps -e git+https://github.com/zms-publishing/ZMS4.git#egg=ZMS
-# RUN pip install install Pillow==6.2.2
-# RUN pip install python-ldap==3.3.1
-# RUN pip install Products.LDAPUserFolder==3.2
-# RUN pip install xhtml2pdf==0.2.4
-# RUN pip install Products.ZSQLiteDA==0.8.1
+# RUN pip install Products.CMFCore==2.3.0
+RUN pip install Pillow==6.2.2
+RUN pip install Products.ZSQLMethods==2.13.5
+RUN pip install python-ldap==3.3.1
+RUN pip install Products.LDAPUserFolder==2.27
+RUN pip install xhtml2pdf==0.2.4
+RUN pip install Products.ZSQLiteDA==0.6.1
 
 
 # # Create Zope Instance
 RUN mkzopeinstance -d /home/zope/venv/instance/zms4 -u admin:admin
 
-# COPY ./var venv/instance/zms4/var
+COPY ./var venv/instance/zms4/var
 
 # Finally Start Zope by Script
 ENTRYPOINT ["/home/zope/venv/instance/zms4/bin/runzope","-X","debug-mode=on"]
