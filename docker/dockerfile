@@ -6,7 +6,7 @@ EXPOSE 5678
 
 # Install Zope/ZEO Dependencies
 RUN apk add python2 make gcc g++ git
-RUN apk add python2-dev mariadb-dev openldap-dev curl bash libffi
+RUN apk add python2-dev mariadb-dev openldap-dev curl bash libffi-dev jpeg-dev zlib-dev libxml2-dev libxslt-dev libressl-dev
 RUN apk add -v py2-pip
 RUN pip2 install setuptools virtualenv
 
@@ -20,6 +20,12 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN cd $VIRTUAL_ENV/bin
 RUN pip install -r https://zopefoundation.github.io/Zope/releases/2.13.29/requirements.txt
 RUN pip install --no-deps -e git+https://github.com/zms-publishing/ZMS4.git#egg=ZMS
+# RUN pip install install Pillow==6.2.2
+# RUN pip install python-ldap==3.3.1
+# RUN pip install Products.LDAPUserFolder==3.2
+# RUN pip install xhtml2pdf==0.2.4
+# RUN pip install Products.ZSQLiteDA==0.8.1
+
 
 # # Create Zope Instance
 RUN mkzopeinstance -d /home/zope/venv/instance/zms4 -u admin:admin
