@@ -1,6 +1,5 @@
 {
     "version": "0.2.0",
-
     "configurations": [
         {
             "name": "ZMS4-Docker",
@@ -10,7 +9,8 @@
             "justMyCode": false,
             "console": "integratedTerminal",
             "args": [
-                "-C ../../etc/zope.conf"
+                "-C/home/zope/instance/zms4_dev/etc/zope.conf",
+                "-Xdebug-mode=on",
             ],
             "env": {
                 "PYTHONUNBUFFERED":"1",

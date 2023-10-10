@@ -1,15 +1,15 @@
 {
 	"folders": [
 		{
-			"name": "Docker-ZMS4-src",
+			"name": "ZMS4-src",
 			"path": "/home/zope/venv/src"
 		},
 		{
-			"name": "Docker-ZMS4-Instance",
+			"name": "ZMS4-Instance",
 			"path": "/home/zope/venv/instance/zms4"
 		},
 		{
-			"name": "Docker-ZMS4-Site-Packages",
+			"name": "ZMS4-Site-Packages",
 			"path": "/home/zope/venv/lib/python2.7/site-packages"
 		},
 	],

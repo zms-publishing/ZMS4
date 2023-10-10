@@ -27,6 +27,7 @@ RUN pip install Products.LDAPUserFolder==2.27
 RUN pip install xhtml2pdf==0.2.4
 RUN pip install Products.ZSQLMethods==2.13.5
 RUN pip install Products.ZSQLiteDA==0.6.1
+RUN pip install debugpy
 
 
 # # Create Zope Instance
@@ -35,4 +36,5 @@ RUN mkzopeinstance -d /home/zope/venv/instance/zms4 -u admin:admin
 # COPY ./var venv/instance/zms4/var
 
 # Finally Start Zope by Script
-# ENTRYPOINT ["/home/zope/venv/instance/zms4/bin/runzope","-X","debug-mode=on"]
+# ENTRYPOINT ["/bin/sh -c"]
+CMD ["/home/zope/venv/instance/zms4/bin/runzope","-X","debug-mode=on"]
