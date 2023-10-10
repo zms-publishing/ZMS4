@@ -17,5 +17,8 @@ services:
       - ./var/:/home/zope/venv/instance/zms4/var/:rw
       - ./etc:/home/zope/venv/instance/zms4/etc/:rw
       - ./Extensions/:/home/zope/venv/instance/zms4/Extensions/:rw
+      - ./.vscode/:/home/zope/venv/src/zms/.vscode/:rw
 
+    ### Override the default command from the dockerfile.
     # command: /home/zope/venv/instance/zms4/bin/runzope -X debug-mode=on
+    command: sleep infinity

@@ -40,5 +40,65 @@
 		"workbench.colorTheme": "Visual Studio Light",
 		"python.linting.enabled": true
 	},
+
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Downgrade Py2-VScode-Extension",
+				"type": "shell",
+				"command": "code --install-extension ms-python.python@2022.2.1924087327",
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"presentation": {
+					"reveal": "always",
+					"panel": "new"
+				},
+				"runOptions": {
+					"runOn": "folderOpen"
+				},
+				"problemMatcher": []
+			}
+		]
+	},
+
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "ZMS4-Docker",
+				"type": "python",
+				"request": "launch",
+				"module": "Zope2.Startup.run",
+				"justMyCode": false,
+				"console": "integratedTerminal",
+				"args": [
+					"-C/home/zope/instance/zms4_dev/etc/zope.conf",
+					"-Xdebug-mode=on",
+				],
+				"env": {
+					"PYTHONUNBUFFERED":"1",
+					"CONFIG_FILE": "/home/zope/venv/instance/zms4/etc/zope.conf",
+					"INSTANCE_HOME": "/home/zope/venv/instance/zms4",
+					"CLIENT_HOME": "/home/zope/venv/instance/zms4",
+					"PYTHON": "/home/zope/venv/bin/python",
+					"SOFTWARE_HOME": "/home/zope/venv/bin/"
+				},
+				"serverReadyAction":{
+					"pattern":"Serving on http://0.0.0.0:8080",
+					"uriFormat": "http://127.0.0.1:8080/manage_main",
+					"action": "openExternally",
+				},
+			},
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+		]
+	},
+
 	"remoteAuthority": "wsl+Ubuntu-20.04"
 }
