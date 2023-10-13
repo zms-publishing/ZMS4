@@ -87,8 +87,8 @@
 					"SOFTWARE_HOME": "/home/zope/venv/bin/"
 				},
 				"serverReadyAction":{
-					"pattern":"Serving on http://0.0.0.0:8080",
-					"uriFormat": "http://127.0.0.1:8080/manage_main",
+					"pattern":"INFO Zope Ready to handle requests",
+					"uriFormat": "http://localhost:8080/manage_main",
 					"action": "openExternally",
 				},
 			},
