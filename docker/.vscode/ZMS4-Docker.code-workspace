@@ -75,7 +75,7 @@
 				"justMyCode": false,
 				"console": "integratedTerminal",
 				"args": [
-					"-C/home/zope/instance/zms4_dev/etc/zope.conf",
+					"-C/home/zope/venv/instance/zms4/etc/zope.conf",
 					"-Xdebug-mode=on",
 				],
 				"env": {
