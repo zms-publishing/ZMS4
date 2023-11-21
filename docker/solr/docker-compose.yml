@@ -12,5 +12,6 @@ services:
     command: /opt/docker-solr/scripts/solr-foreground
     ### HINTS: 
     ### 1. create the new core with an attached console
+    ###    /opt/docker-solr/scripts/precreate-core mycore
     ### 2. set mounted volume permissions to 777
 
