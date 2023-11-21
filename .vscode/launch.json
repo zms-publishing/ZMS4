@@ -27,6 +27,31 @@
             },
         },
         {
+            "name": "Python: ZMS4-Py2-ZEO",
+            "type": "python",
+            "request": "launch",
+            "module": "Zope2.Startup.run",
+            "justMyCode": false,
+            "console": "integratedTerminal",
+            "args": [
+                "-C/home/zope/instance/zms4_zeo/etc/zope_8087.conf",
+                "-Xdebug-mode=on",
+            ],
+            "env": {
+                "PYTHONUNBUFFERED":"1",
+                "CONFIG_FILE": "/home/zope/instance/zms4_zeo/etc/zope_8087.conf",
+                "INSTANCE_HOME": "/home/zope/instance/zms4_zeo",
+                "CLIENT_HOME": "/home/zope/instance/zms4_zeo",
+                "PYTHON": "/home/zope/vpy27/bin/python",
+                "SOFTWARE_HOME": "/home/zope/vpy27/bin/"
+            },
+            "serverReadyAction":{
+                "pattern":"Zope Ready to handle requests",
+                "uriFormat": "http://127.0.0.1:8087/manage_main",
+                "action": "openExternally",
+            },
+        },
+        {
             "name": "Docker: ZMS4-Py2-Dev",
             "type": "python",
             "request": "launch",

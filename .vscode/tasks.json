@@ -1,4 +1,5 @@
 {
+	// https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2022.2.1924087327/vspackage
 	"version": "2.0.0",
 	"tasks": [
 		{
