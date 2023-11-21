@@ -185,7 +185,7 @@ class ZMSZCatalogSolrConnector(
         xml.append('</doc>')
       zcm.get_sitemap(cb, node, recursive)
       xml.append('</add>')
-      return '\n'.join(xml)
+      return self.str_item(xml)
 
 
     # --------------------------------------------------------------------------
