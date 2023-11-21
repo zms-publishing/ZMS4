@@ -1,17 +1,21 @@
 {
 	"folders": [
 		{
-			"Name":"ZMS4",
+			"name": "ZMS4-src",
 			"path": "../"
 		},
-		{
-			"Name":"Zope-Latest",
-			"path": "../../../src/zopefoundation/Zope"
-		}
+		// {
+		// 	"name": "ZMS4-Instance",
+		// 	"path": "/home/zope/venv/instance/zms4"
+		// },
+		// {
+		// 	"name": "ZMS4-Site-Packages",
+		// 	"path": "/home/zope/venv/lib/python2.7/site-packages"
+		// },
 	],
 	"settings": {
-		"python.pythonPath": "/home/zope/vpy27/bin/",
 		"window.zoomLevel": 0,
+		"git.ignoreMissingGitWarning": true,
 		"editor.minimap.enabled": false,
 		"editor.renderWhitespace": "all",
 		"editor.renderControlCharacters": false,
@@ -20,16 +24,19 @@
 			"*.zpt": "html",
 			"*.zcml": "xml"
 		},
+		"scm.alwaysShowActions": true,
 		"files.exclude": {
-			"**/site-packages/**":true,
 			"*.pyc": true,
-			"*.egg*":true,
-			"**/__pycache__/**":true,
-
+			"*-all.min.*":true,
+			"**/cache/**": true,
+			"**/Data.*": true,
+		},
+		"search.exclude": { 
+			"**/apidocs/**": true
 		},
 		"files.eol": "\n",
 		"files.autoSave": "afterDelay",
-		"workbench.colorTheme": "Default Light+",
+		"workbench.colorTheme": "Visual Studio Light",
 		"python.linting.enabled": true
 	},
 	"remoteAuthority": "wsl+Ubuntu-20.04"

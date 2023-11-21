@@ -15,3 +15,8 @@ The VSCode Docker Extension [ms-azuretools.vscode-docker](https://marketplace.vi
 
 ## Attach VSCode to the ZMS Container
 Another right click on the running container-ID allows to intrude the container with VSCode and launch a new Zope instance in debugging mode. Hint: For this purpose the ./docker/.vscode folder contains a prepared VSCode-config file  [launch.json](https://github.com/zms-publishing/ZMS4/blob/main/docker/.vscode/launch.json).
+
+To start the container on the command line, just type: 
+```bash
+ docker compose run --service-ports zms4  /bin/bash
+```

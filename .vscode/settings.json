@@ -1,0 +1,16 @@
+{
+	"python.defaultInterpreterPath": "/home/zope/vpy27/bin/python",
+	// "python.defaultInterpreterPath": "/home/zope/venv/bin/python",
+	"python.linting.enabled": false,
+	"python.formatting.provider": "none",
+
+	// "python.testing.pytestEnabled": false,
+	// "python.testing.unittestEnabled": true,
+	// "python.testing.unittestArgs": [
+	// 	"-v",
+	// 	"-s",
+	// 	"./tests",
+	// 	"-p",
+	// 	"test*.py"
+	// ],
+}
