@@ -52,7 +52,7 @@ RUN virtualenv --python=python2  $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 WORKDIR /home/zope/venv
 RUN pip install -r https://zopefoundation.github.io/Zope/releases/2.13.29/requirements.txt
-RUN pip install --no-deps -e git+https://github.com/zms-publishing/ZMS4.git@fb_docker_pips#egg=ZMS
+RUN pip install --no-deps -e git+https://github.com/zms-publishing/ZMS4.git@main#egg=ZMS
 # RUN ./pip install Products.CMFCore==2.3.0
 RUN pip install Pillow==6.2.2
 RUN pip install python-ldap==3.3.1
