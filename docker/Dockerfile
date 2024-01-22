@@ -1,6 +1,10 @@
 FROM ubuntu:16.04
 RUN apt-get update
 
+RUN apt-get install -y ca-certificates
+# COPY zerts-pem/* /usr/local/share/ca-certificates/
+RUN update-ca-certificates
+
 EXPOSE 8080
 EXPOSE 5678
 
@@ -51,7 +55,7 @@ ENV VIRTUAL_ENV=/home/zope/venv
 RUN virtualenv --python=python2  $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 WORKDIR /home/zope/venv
-RUN pip install -r https://zopefoundation.github.io/Zope/releases/2.13.29/requirements.txt
+RUN pip install --trusted-host zopefoundation.github.io -r https://zopefoundation.github.io/Zope/releases/2.13.29/requirements.txt
 RUN pip install --no-deps -e git+https://github.com/zms-publishing/ZMS4.git#egg=ZMS
 # RUN ./pip install Products.CMFCore==2.3.0
 RUN pip install Pillow==6.2.2
