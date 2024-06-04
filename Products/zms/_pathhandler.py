@@ -20,6 +20,7 @@
 import copy
 import re
 # Product Imports.
+from Products.zms import rest_api
 from Products.zms import standard
 from Products.zms import _blobfields
 from Products.zms import _confmanager
@@ -167,7 +168,13 @@ class PathHandler(object):
       # otherwise do some 'magic'
       else:
         standard.writeLog( self, '[__bobo_traverse__]: otherwise do some magic')
-        
+
+        # REST-API.
+        if name == '++rest_api':
+          request.RESPONSE.setHeader('Content-Type','application/json; charset=utf-8')
+          return rest_api.RestApiController(self, TraversalRequest)
+
+        # Default Language.
         if request.get('lang') is None:
           lang = self.getPrimaryLanguage()
           request.set('lang', lang)
