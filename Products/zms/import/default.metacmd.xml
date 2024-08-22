@@ -266,9 +266,9 @@ return '\n'.join(prt)
 
 	<tal:block tal:condition="python:request['task_type']=='TASK_CHANGED_BY_DATE'">
 		<tal:block tal:define="
-				obj_tuples python:[ ( x.attr('change_dt'), x ) for x in [here]+here.getTreeNodes(request) ];
-				obj_tuples python:sorted(obj_tuples, key=lambda obj: obj[0], reverse=True);
-				global obs python:[obj[1] for obj in obj_tuples]"></tal:block>
+				unsorted python:map(lambda x:(x.attr('change_dt'),x),[here]+here.getTreeNodes(request));
+				dummy0 python:unsorted.sort(reverse=True);
+				dummy0 python:obs.extend(map(lambda x:x[1],unsorted))"></tal:block>
 	</tal:block>
 
 	<tal:block tal:condition="python:request['task_type'] not in task_ids">
@@ -329,7 +329,7 @@ return '\n'.join(prt)
         </list>
       </item>
       <item key="name"><![CDATA[TAB_TASKS]]></item>
-      <item key="revision"><![CDATA[4.0.0]]></item>
+      <item key="revision"><![CDATA[4.0.1]]></item>
       <item key="roles" type="list">
         <list>
           <item><![CDATA[*]]></item>
