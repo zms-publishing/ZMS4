@@ -77,9 +77,17 @@ def exportFolder(self, root, path, id, REQUEST, depth=0):
         if ob.meta_type in [ 'DTML Document', 'DTML Method', 'Page Template', 'Script (Python)']:
           try:
             if ob.meta_type in [ 'DTML Document', 'DTML Method', 'Page Template']:
-              v = ob(ob, REQUEST)
+              try:
+                v = ob(ob, REQUEST)
+              except:
+                # standard.writeError( self, "['DTML Document', 'DTML Method', 'Page Template']")
+                v = ob.read()
             elif ob.meta_type in [ 'Script (Python)']:
-              v = ob()
+              try:
+                v = ob()
+              except:
+                # standard.writeError( self, "['Script (Python)']")
+                v = ob.read()
             v = localHtml( ob, v)
             v = localIndexHtml( self, ob, len(ob.absolute_url().split('/'))-len(root.absolute_url().split('/'))+depth, v)
             ob = v
@@ -165,6 +173,9 @@ def localIndexHtml(self, obj, level, html, xhtml=False):
    # Process absolute URLs.
    s_new = '%s'%sRoot
    s_old = '%s/'%self.absolute_url()
+   # Ensure string type
+   html = standard.pystr2(html, errors='replace')
+   html = standard.pystr(html)
    if xhtml or level != 0:
      html = html.replace( s_old, s_new)
    if self.getConfProperty('ZMS.pathhandler', 0) != 0:
