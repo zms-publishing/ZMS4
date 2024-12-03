@@ -1160,7 +1160,7 @@ def format_datetime_iso(t):
     tz = time.timezone
   else:
     tz = 0
-  #  The offset of the local (non-DST) timezone, in seconds west of UTC
+  # The offset of the local (non-DST) timezone, in seconds west of UTC
   # (negative in most of Western Europe, positive in the US, zero in the
   # UK).
   #
@@ -1320,6 +1320,16 @@ def compareDate(t0, t1):
   @returns: A negative number if date t0 is before t1, zero if they are equal, or positive if t0 is after t1.
   @rtype: C{int}
   """
+  # Set DST / Daylight Saving Time to -1 (unknown) to avoid problems with mktime
+  if isinstance(t0, time.struct_time):
+    t0_list = list(t0)
+    t0_list[8] = -1
+    t0 = time.struct_time(t0_list)
+  if isinstance(t1, time.struct_time):
+    t1_list = list(t1)
+    t1_list[8] = -1
+    t1 = time.struct_time(t1_list)
+
   mt0 = time.mktime(stripDateTime(getDateTime(t0)))
   mt1 = time.mktime(stripDateTime(getDateTime(t1)))
   if mt1 > mt0:
