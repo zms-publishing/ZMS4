@@ -1253,6 +1253,13 @@ def getDateTime(t):
         t = time.mktime( t)
       if not isinstance(t, time.struct_time):
         t = time.localtime( t)
+      else:
+        if t.tm_isdst == 1:
+          # In struct_time normalize tm_dst-value  
+          # (DST: Daylight Saving Time) to avoid mktime-error
+          t = list(t)
+          t[8] = -1
+          t = time.localtime( time.mktime( t))
     except:
       pass
   return t
@@ -1320,19 +1327,8 @@ def compareDate(t0, t1):
   @returns: A negative number if date t0 is before t1, zero if they are equal, or positive if t0 is after t1.
   @rtype: C{int}
   """
-  
-  if isinstance(t0, time.struct_time):
-    # Normalize tm_dst-variable (DST: Daylight Saving Time) 
-    # in struct_time not to trigger mktime-error 
-    mt0 = time.mktime(stripDateTime(DateTime(format_datetime_iso(t0))))
-  else:
-    mt0 = time.mktime(stripDateTime(getDateTime(t0)))
-
-  if isinstance(t1, time.struct_time):
-    mt1 = time.mktime(stripDateTime(DateTime(format_datetime_iso(t1))))
-  else:
-    mt1 = time.mktime(stripDateTime(getDateTime(t1)))
-
+  mt0 = time.mktime(stripDateTime(getDateTime(t0)))
+  mt1 = time.mktime(stripDateTime(getDateTime(t1)))
   if mt1 > mt0:
     return +1
   elif mt1 < mt0:
