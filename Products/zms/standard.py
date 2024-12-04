@@ -1320,18 +1320,19 @@ def compareDate(t0, t1):
   @returns: A negative number if date t0 is before t1, zero if they are equal, or positive if t0 is after t1.
   @rtype: C{int}
   """
-  # Set DST / Daylight Saving Time to -1 (unknown) to avoid problems with mktime
+  
   if isinstance(t0, time.struct_time):
-    t0_list = list(t0)
-    t0_list[8] = -1
-    t0 = time.struct_time(t0_list)
-  if isinstance(t1, time.struct_time):
-    t1_list = list(t1)
-    t1_list[8] = -1
-    t1 = time.struct_time(t1_list)
+    # Normalize tm_dst-variable (DST: Daylight Saving Time) 
+    # in struct_time not to trigger mktime-error 
+    mt0 = time.mktime(stripDateTime(DateTime(format_datetime_iso(t0))))
+  else:
+    mt0 = time.mktime(stripDateTime(getDateTime(t0)))
 
-  mt0 = time.mktime(stripDateTime(getDateTime(t0)))
-  mt1 = time.mktime(stripDateTime(getDateTime(t1)))
+  if isinstance(t1, time.struct_time):
+    mt1 = time.mktime(stripDateTime(DateTime(format_datetime_iso(t1))))
+  else:
+    mt1 = time.mktime(stripDateTime(getDateTime(t1)))
+
   if mt1 > mt0:
     return +1
   elif mt1 < mt0:
