@@ -1160,7 +1160,7 @@ def format_datetime_iso(t):
     tz = time.timezone
   else:
     tz = 0
-  #  The offset of the local (non-DST) timezone, in seconds west of UTC
+  # The offset of the local (non-DST) timezone, in seconds west of UTC
   # (negative in most of Western Europe, positive in the US, zero in the
   # UK).
   #
@@ -1253,6 +1253,13 @@ def getDateTime(t):
         t = time.mktime( t)
       if not isinstance(t, time.struct_time):
         t = time.localtime( t)
+      else:
+        if t.tm_isdst == 1:
+          # In struct_time normalize tm_dst-value  
+          # (DST: Daylight Saving Time) to avoid mktime-error
+          t = list(t)
+          t[8] = -1
+          t = time.localtime( time.mktime( t))
     except:
       pass
   return t
