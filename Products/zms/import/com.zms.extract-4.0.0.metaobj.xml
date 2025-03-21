@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?zms version='ZMS4-4.4.1dev'?>
+<list>
+  <item type="dictionary">
+    <dictionary>
+      <item key="key"><![CDATA[com.zms.extract]]></item>
+      <item key="value" type="dictionary">
+        <dictionary>
+          <item key="__obj_attrs__" type="list">
+            <list>
+            </list>
+          </item>
+          <item key="enabled" type="int">1</item>
+          <item key="id"><![CDATA[com.zms.extract]]></item>
+          <item key="name"><![CDATA[com.zms.extract]]></item>
+          <item key="package"></item>
+          <item key="revision"><![CDATA[4.0.0]]></item>
+          <item key="type"><![CDATA[ZMSPackage]]></item>
+        </dictionary>
+      </item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="key"><![CDATA[url_extract]]></item>
+      <item key="value" type="dictionary">
+        <dictionary>
+          <item key="__obj_attrs__" type="list">
+            <list>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[fas fa-file-import text-primary]]></item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[icon_clazz]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Icon-Class (CSS)]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[constant]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[titlealt]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="meta_type"><![CDATA[titlealt]]></item>
+                  <item key="multilang" type="int">1</item>
+                  <item key="name"><![CDATA[DC.Title.Alt]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[string]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[title]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">1</item>
+                  <item key="meta_type"><![CDATA[title]]></item>
+                  <item key="multilang" type="int">1</item>
+                  <item key="name"><![CDATA[DC.Title]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[string]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="default"><![CDATA[https://presse.rundfunkbeitrag.de/latest_news]]></item>
+                  <item key="id"><![CDATA[content_url]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Absolute URL]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[url]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="default"><![CDATA[div.content-bottom]]></item>
+                  <item key="id"><![CDATA[content_node]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Node-Selector]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[string]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="default"><![CDATA[.media {
+    float: left;
+    margin: .5rem 2rem 0 0;
+    max-width:30%;
+}
+.media img {
+    max-width: 100%;
+}
+p {
+    text-align: left !important;
+}
+h1.maintitle {
+    display: none;
+}
+body.zmi h1.maintitle {
+    display: block;
+}]]>
+                  </item>
+                  <item key="id"><![CDATA[css_custom]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Custom-CSS]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[text]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[## params: self, content_url, content_node, force
+from Products.zms import standard
+from bs4 import BeautifulSoup
+try:
+    from urllib.request import urlopen # Py3
+except:
+    from urllib import urlopen # Py2
+import hashlib
+import datetime
+import re
+import requests
+
+def cache_data_sql(self, extract={}):
+    # SQLITE: SAVE/CACHE ATTRIBUTE VALUES
+    lang = self.REQUEST.get('lang','ger')
+    self.zms_page_cache.sqlite_db_upsert_sql(
+        zms_id = self.getId(),
+        client_id = self.getHome().getId(),
+        change_dt = extract['content_datetime'],
+        lang = lang,
+        content_md5 = extract['content_md5'],
+        content_datetime = extract['content_datetime'],
+        content_cache = extract['content_cache']
+    )
+    return True
+
+
+def gt(dt_str):
+    ### How to convert Python's .isoformat() string back into datetime object
+    ### https://stackoverflow.com/questions/28331512
+    dt, _, us = dt_str.partition(".")
+    dt = datetime.datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S")
+    us = int(us.rstrip("Z"), 10)
+    return dt + datetime.timedelta(microseconds=us)
+
+
+def url_extract(self, content_url, content_node, force=True):
+    now = datetime.datetime.now()
+    now_iso = now.isoformat()
+    meta_type = self.meta_type
+
+    extract = {
+            'content_md5':'',
+            'content_datetime':'',
+            'content_cache':''
+        }
+    
+    res = self.zms_page_cache.sqlite_db_select_sql(zms_id=self.getId())
+    if len(res)>0:
+        extract['content_md5']=res[0]['content_md5']
+        extract['content_datetime']=res[0]['content_datetime']
+        extract['content_cache']=res[0]['content_cache']
+        dt_cached = gt(res[0]['content_datetime'])
+    else:
+        dt_cached = now
+
+    # Check MD5/Refresh Content Once a Day or on Force
+    if force or ( (now - dt_cached).days > 0 ) or len(res)==0:
+        try:
+            baseurl = re.compile(r'(https:\/\/(.*?)\/)').match(content_url)[0] # Py3
+        except:
+            baseurl = re.compile(r'(https:\/\/(.*?)\/)').search(content_url).group(0) # Py2
+        html = requests.get(content_url).text
+        # html = urlopen(content_url).read()
+        soup = BeautifulSoup(html, features='lxml')
+        content = standard.pystr(soup.select_one(content_node))
+        content = content.encode('utf-8')
+        md5 = hashlib.md5(content).hexdigest()
+
+        md5_prev = extract['content_md5'] 
+        extract['content_md5'] = md5
+        extract['content_datetime'] = now_iso
+        if force:
+            extract['html'] = html
+
+        if md5 != md5_prev:
+            # Fix URLs in Content
+            for attr in ['src','srcset','href']:
+                content = content.replace('%s="/'%attr,'%s="%s'%(attr,baseurl))
+            extract['content_cache'] = content
+            # Save Cache On MD5-Diff
+            cache_data_sql(self, extract=extract)
+        else:
+            self.zms_page_cache.sqlite_db_update_datetime_sql(zms_id=self.getId())
+
+    return extract
+]]>
+                  </item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[url_extract]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[URL Content Extaction]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[External Method]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<pre tal:define="
+        content_url python:'https://presse.rundfunkbeitrag.de/latest_news';
+        content_node python:'main';"
+    tal:content="python:context.url_extract(context.content.e105020.e105022,content_url=content_url,content_node=content_node,force=True)">
+    Extracted HTML
+</pre>]]>
+                  </item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[url_extract_test]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[URL Content Extaction Test]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[Page Template]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<tal:block 
+        tal:define="zmscontext options/zmscontext" 
+        tal:condition="python:not request.get('ZMS_INSERT',None)">
+    <div class="form-group row">
+        <label for="titlealt_ger" class="col-sm-2 control-label mandatory"><span>Preview</span></label>
+        <div class="col-sm-10"> 
+            <div style="border:1px solid silver;padding:1rem;border-radius:4px;background:aliceblue"
+                tal:define="extract python:context.url_extract(zmscontext, content_url=zmscontext.attr('content_url'), content_node=zmscontext.attr('content_node'), force=True)">
+                <tal:block
+                    tal:content="structure python:extract['content_cache']">
+                    Extracted HTML
+                </tal:block>
+                <div class="code code text-monospace" style="font-size:10px;margin:2rem 0;border-top:1px dotted silver;padding-top:.25rem;">
+                    Date: <code tal:content="python:extract['content_datetime']"></code><br/> 
+                    MD5: <code tal:content="python:extract['content_md5']"></code><br/>
+                    HTML: <a href="javascript:$('#content_preview_html').toggle()">show</a><br/>
+                    <pre id="content_preview_html" style="display:none;" tal:content="python:extract['html']"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        #content_node, 
+        #css_custom {
+            font-family: monospace;
+            background:#eaedef;
+        }
+         #css_custom {
+            font-size: smaller !important;
+        }
+        #content_preview_html {
+            background: #354f67;
+            color: white;
+            padding: .5rem;
+            border-radius: 4px;
+        }
+        <tal:block tal:replace="python:zmscontext.attr('css_custom')">CSS Customs</tal:block>
+    </style>
+</tal:block>]]>
+                  </item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[content_preview]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[content_preview]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[interface]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<!-- url_extract.standard_html -->
+<div class="url_extract" 
+    tal:define="zmscontext options/zmscontext;
+	    extract python:context.url_extract(zmscontext, content_url=zmscontext.attr('content_url'), content_node=zmscontext.attr('content_node'), force=False);">
+            <tal:block
+                tal:content="structure python:extract['content_cache'].replace('\\&quot;','\042')">
+                Extracted HTML
+            </tal:block>
+    <pre style="font-size:10px;margin:2rem 0;border-top:1px dotted silver;padding-top:.25rem;">Date: <code tal:content="python:extract['content_datetime']"></code>, MD5: <code tal:content="python:extract['content_md5']"></code></pre>
+    <style tal:content="python:zmscontext.attr('css_custom')">CSS Customs</style>
+</div>
+<!-- url_extract.standard_html -->]]>
+                  </item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[standard_html]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[Template: URL-Extract]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[zpt]]></item>
+                </dictionary>
+              </item>
+            </list>
+          </item>
+          <item key="access" type="dictionary">
+            <dictionary>
+              <item key="delete_custom"></item>
+              <item key="delete_deny" type="list">
+                <list>
+                  <item></item>
+                  <item></item>
+                  <item></item>
+                  <item></item>
+                </list>
+              </item>
+              <item key="insert_custom"><![CDATA[{$}]]></item>
+              <item key="insert_deny" type="list">
+                <list>
+                  <item></item>
+                  <item></item>
+                  <item></item>
+                  <item></item>
+                </list>
+              </item>
+            </dictionary>
+          </item>
+          <item key="enabled" type="int">1</item>
+          <item key="id"><![CDATA[url_extract]]></item>
+          <item key="name"><![CDATA[URL-Extract Page]]></item>
+          <item key="package"><![CDATA[com.zms.extract]]></item>
+          <item key="revision"><![CDATA[4.0.0]]></item>
+          <item key="type"><![CDATA[ZMSDocument]]></item>
+        </dictionary>
+      </item>
+    </dictionary>
+  </item>
+  <item type="dictionary">
+    <dictionary>
+      <item key="key"><![CDATA[url_extract_lib]]></item>
+      <item key="value" type="dictionary">
+        <dictionary>
+          <item key="__obj_attrs__" type="list">
+            <list>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[First insert a ZSQLiteDA object named 'sqlite_db']]></item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[readme]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[readme]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[constant]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<connection>sqlite_db</connection>
+<params></params>
+<max_rows>1000</max_rows>
+<max_cache>100</max_cache>
+<cache_time>0</cache_time>
+CREATE TABLE "pages" (
+	"zms_id" VARCHAR(36) PRIMARY KEY NOT NULL ,
+	"client_id" VARCHAR(36) NOT NULL ,
+	"change_dt" VARCHAR(48) ,
+	"lang" VARCHAR(3) ,
+	"content_md5" VARCHAR(255) ,
+	"content_datetime" VARCHAR(48) ,
+	"content_cache" TEXT
+)]]>
+                  </item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[zms_page_cache/sqlite_db_create]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[zms_page_cache/sqlite_db_create]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[Z SQL Method]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<connection>sqlite_db</connection>
+<params>zms_id
+client_id
+change_dt
+lang
+content_md5
+content_datetime
+content_cache</params>
+<max_rows>1000</max_rows>
+<max_cache>100</max_cache>
+<cache_time>0</cache_time>
+UPDATE OR IGNORE pages SET
+  zms_id = <dtml-sqlvar zms_id type=nb>,
+  client_id = <dtml-sqlvar client_id type=nb>,
+  change_dt = <dtml-sqlvar change_dt type=nb>,
+  lang = <dtml-sqlvar lang type=nb>,
+  content_md5 = <dtml-sqlvar content_md5 type=nb>,
+  content_datetime = <dtml-sqlvar content_datetime type=nb>,
+  content_cache = <dtml-sqlvar content_cache type=nb>
+WHERE zms_id = <dtml-sqlvar zms_id type=nb>
+<dtml-var sql_delimiter>
+INSERT OR IGNORE INTO pages (
+  zms_id,
+  client_id,
+  change_dt,
+  lang,
+  content_md5,
+  content_datetime,
+  content_cache
+) VALUES (
+  <dtml-sqlvar zms_id type=nb>,
+  <dtml-sqlvar client_id type=nb>,
+  <dtml-sqlvar change_dt type=nb>,
+  <dtml-sqlvar lang type=nb>,
+  <dtml-sqlvar content_md5 type=nb>,
+  <dtml-sqlvar content_datetime type=nb>,
+  <dtml-sqlvar content_cache type=nb>
+)]]>
+                  </item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[zms_page_cache/sqlite_db_upsert_sql]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[zms_page_cache/sqlite_db_upsert_sql]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[Z SQL Method]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<connection>sqlite_db</connection>
+<params>zms_id</params>
+<max_rows>1000</max_rows>
+<max_cache>100</max_cache>
+<cache_time>0</cache_time>
+SELECT * FROM pages <dtml-if zms_id>WHERE zms_id = <dtml-sqlvar zms_id type=nb></dtml-if>]]>
+                  </item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[zms_page_cache/sqlite_db_select_sql]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[zms_page_cache/sqlite_db_select_sql]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[Z SQL Method]]></item>
+                </dictionary>
+              </item>
+              <item type="dictionary">
+                <dictionary>
+                  <item key="custom"><![CDATA[<connection>sqlite_db</connection>
+<params>zms_id</params>
+<max_rows>1000</max_rows>
+<max_cache>100</max_cache>
+<cache_time>0</cache_time>
+UPDATE pages SET content_datetime = '<dtml-var "ZopeTime()" fmt="%Y-%m-%dT%H:%M:%S.0">' WHERE zms_id = <dtml-sqlvar zms_id type=nb>]]>
+                  </item>
+                  <item key="default"></item>
+                  <item key="id"><![CDATA[zms_page_cache/sqlite_db_update_datetime_sql]]></item>
+                  <item key="keys" type="list">
+                    <list>
+                    </list>
+                  </item>
+                  <item key="mandatory" type="int">0</item>
+                  <item key="meta_type"></item>
+                  <item key="multilang" type="int">0</item>
+                  <item key="name"><![CDATA[zms_page_cache/sqlite_db_update_datetime_sql]]></item>
+                  <item key="repetitive" type="int">0</item>
+                  <item key="type"><![CDATA[Z SQL Method]]></item>
+                </dictionary>
+              </item>
+            </list>
+          </item>
+          <item key="access" type="dictionary">
+            <dictionary>
+              <item key="delete_custom"></item>
+              <item key="delete_deny" type="list">
+                <list>
+                </list>
+              </item>
+              <item key="insert_custom"></item>
+              <item key="insert_deny" type="list">
+                <list>
+                </list>
+              </item>
+            </dictionary>
+          </item>
+          <item key="enabled" type="int">0</item>
+          <item key="id"><![CDATA[url_extract_lib]]></item>
+          <item key="name"><![CDATA[URL-Extract Lib]]></item>
+          <item key="package"><![CDATA[com.zms.extract]]></item>
+          <item key="revision"><![CDATA[4.0.0]]></item>
+          <item key="type"><![CDATA[ZMSLibrary]]></item>
+        </dictionary>
+      </item>
+    </dictionary>
+  </item>
+</list>
